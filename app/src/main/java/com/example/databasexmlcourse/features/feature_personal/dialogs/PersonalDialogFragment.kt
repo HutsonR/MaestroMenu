@@ -1,4 +1,4 @@
-package com.example.databasexmlcourse.features.feature_menu.dialogs
+package com.example.databasexmlcourse.features.feature_personal.dialogs
 
 import android.os.Bundle
 import android.text.Editable
@@ -12,14 +12,15 @@ import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.DialogFragmentWithCategoryBinding
 import com.example.databasexmlcourse.domain.models.DishItem
+import com.example.databasexmlcourse.domain.models.PersonalItem
 import kotlinx.coroutines.flow.onEach
 
 
-class MenuDialogFragment : DialogFragment() {
+class PersonalDialogFragment : DialogFragment() {
     private var _binding: DialogFragmentWithCategoryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MenuDialogViewModel by viewModels()
+    private val viewModel: PersonalDialogViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = DialogFragmentWithCategoryBinding.inflate(inflater, container, false)
@@ -39,6 +40,12 @@ class MenuDialogFragment : DialogFragment() {
     }
 
     private fun initialize() {
+        binding.nameLayout.hint = getString(R.string.personal_fio)
+        binding.priceET.visibility = View.GONE
+        binding.categoryButton.text = getString(R.string.personal_type)
+        binding.addCategoryButton.visibility = View.GONE
+        binding.saveButton.text = getString(R.string.personal_add_button)
+
         parseArguments()
         binding.saveButton.setOnClickListener {
             viewModel.onActionButtonClick()
@@ -51,12 +58,11 @@ class MenuDialogFragment : DialogFragment() {
     }
 
     private fun parseArguments() {
-        val item = arguments?.getParcelable<DishItem>(PARCEL_ITEM)
+        val item = arguments?.getParcelable<PersonalItem>(PARCEL_ITEM)
         item?.let {
             with(binding) {
                 nameET.setText(it.name)
-                priceET.setText(it.price.toString())
-                categoryButton.text = "Категория: ${it.dishCategoryId}"
+                categoryButton.text = it.type
                 saveButton.text = getString(R.string.save)
             }
             viewModel.parcelInitialize(it)
@@ -68,31 +74,27 @@ class MenuDialogFragment : DialogFragment() {
         viewModel.action.onEach(::handleActions).collectOnStart(viewLifecycleOwner)
     }
 
-    private fun handleState(state: MenuDialogViewModel.State) {
+    private fun handleState(state: PersonalDialogViewModel.State) {
         updateCategoryTextButton(state.category)
         updateSaveButtonState(state.isSaveButtonEnable)
     }
 
-    private fun handleActions(action: MenuDialogViewModel.Actions) {
+    private fun handleActions(action: PersonalDialogViewModel.Actions) {
         when (action) {
-            is MenuDialogViewModel.Actions.OpenCategoryDialog -> MenuDialogRecyclerFragment()
-                .show(childFragmentManager, "menu category view fragment")
-            is MenuDialogViewModel.Actions.OpenAddCategoryDialog -> MenuDialogAddCategoryFragment().show(childFragmentManager, "menu add category view fragment")
-            is MenuDialogViewModel.Actions.GoBack -> dismiss()
+            is PersonalDialogViewModel.Actions.OpenCategoryDialog -> PersonalDialogRecyclerFragment().show(childFragmentManager, "personal category view fragment")
+            is PersonalDialogViewModel.Actions.GoBack -> dismiss()
         }
     }
 
     private fun setListeners() {
         setFragmentListener()
         nameListener()
-        priceListener()
         categoryButtonListener()
-        addCategoryButtonListener()
     }
 
     private fun updateCategoryTextButton(text: String) {
         if (text.isNotBlank()) {
-            binding.categoryButton.text = "Категория: $text"
+            binding.categoryButton.text = text
         }
     }
 
@@ -105,10 +107,10 @@ class MenuDialogFragment : DialogFragment() {
     private fun setFragmentListener() {
         // Из MenuDialogRecyclerFragment
         activity?.supportFragmentManager?.setFragmentResultListener(
-            MenuDialogRecyclerFragment.REQ_KEY_CATEGORY_ITEM,
+            PersonalDialogRecyclerFragment.REQ_KEY_CATEGORY_ITEM,
             this
         ) { _, bundle ->
-            val requestValue: String? = bundle.getString(MenuDialogRecyclerFragment.KEY_CATEGORY_ITEM)
+            val requestValue: String? = bundle.getString(PersonalDialogRecyclerFragment.KEY_CATEGORY_ITEM)
             requestValue?.let {
                 viewModel.updateCategory(requestValue)
             }
@@ -125,25 +127,11 @@ class MenuDialogFragment : DialogFragment() {
         })
     }
 
-    private fun priceListener() {
-        binding.priceET.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.updatePrice(s.toString())
-            }
-            override fun afterTextChanged(s: Editable?) = Unit
-        })
-    }
-
     private fun categoryButtonListener() {
         binding.categoryButton.setOnClickListener { viewModel.openCategoryDialog() }
     }
 
-    private fun addCategoryButtonListener() {
-        binding.addCategoryButton.setOnClickListener { viewModel.openAddCategoryDialog() }
-    }
-
     companion object {
-        const val PARCEL_ITEM = "MenuDialogItem"
+        const val PARCEL_ITEM = "PersonalDialogItem"
     }
 }
