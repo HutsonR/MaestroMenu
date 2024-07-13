@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#49A2DD</color>
+    <color name="lightPrimary">#E9F6FF</color>
+    <color name="backgroundMain">#FDFFFF</color>
+    <color name="black">#1b1b1d</color>
+    <color name="alwaysBlack">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="alwaysWhite">#FFFFFFFF</color>
+    <color name="textGray">#605F64</color>
+    <color name="textHintGray">#94919F</color>
+    <color name="iconGray">#605F64</color>
+    <color name="scheduleIcon">#48484C</color>
+    <color name="scheduleCircleCompleteIcon">#BDBDBD</color>
+    <color name="bgGray">#F8F8F8</color>
+    <color name="menuColorGray">#ACACAC</color>
+
+    <color name="divider">#ECECEC</color>
+    <color name="border_outlined_button">#ACAAAF</color>
+    <color name="text_outlined_button">#49454F</color>
+
+    <!--  Task  -->
+    <color name="task_dialog_bg">#FDFFFF</color>
+    <color name="task_dialog_item">#F8F8F8</color>
+    <color name="task_dialog_border">#F4F4F4</color>
+    <color name="task_dialog_divider">#E6E6E6</color>
+    <color name="task_dialog_tag_border">#E6E6E6</color>
+
+    <!--  Bottom Dialog Sheet  -->
+    <color name="bottom_sheet_background">#FFFFFF</color>
+    <color name="bottom_sheet_button_background">#EBEBEB</color>
+    <color name="bottom_sheet_divider">#CDCDCD</color>
+
+    <!--  Navigation  -->
+    <color name="navDivider">#f1f2f6</color>
+    <color name="bgNavigation">#FDFFFF</color>
+    <color name="bgNavActiveItem">#E9F6FF</color>
+    <color name="navIcon">#1B1B1D</color>
+    <color name="navText">#1B1B1D</color>
+
+    <color name="primaryPicker">#378BC3</color>
+    <color name="red">#D54343</color>
+    <color name="green">#83ee7a</color>
+</resources>

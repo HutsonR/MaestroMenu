@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Grechka</string>
+    
+    <!--  Main  -->
+    <string name="main_stats_orders">Всего заказов</string>
+    <string name="main_stats_total_sum">Общая выручка</string>
+    <string name="main_stats_total_clients">Всего клиентов</string>
+    <string name="main_stats_average_sum">Средний чек</string>
+    <string name="main_stats_orders_history">История заказов</string>
+
+    <!--  Menu  -->
+    <string name="menu_page_search">Найти блюдо</string>
+    <string name="menu_add_name">Название блюда</string>
+    <string name="menu_add_price">Цена</string>
+    <string name="menu_add_category">Категория блюда</string>
+    <string name="menu_add_button">Добавить блюдо в меню</string>
+    <string name="menu_category_search">Найти категорию</string>
+    <string name="menu_add_category_button">Добавить категорию</string>
+
+    <!--  Orders  -->
+    <string name="orders_add_button">Создать заказ</string>
+    <string name="orders_item_btn_take">Принять заказ</string>
+    <string name="orders_item_btn_finish">Завершить</string>
+    <string name="orders_item_btn_cancel">Отменить</string>
+
+    <!--  Personal  -->
+    <string name="personal_add_button">Добавить сотрудника</string>
+
+    <string name="menu_main">Главная</string>
+    <string name="menu_menu">Меню</string>
+    <string name="menu_orders">Заказы</string>
+    <string name="menu_personal">Персонал</string>
+    <string name="menu_other">Профиль</string>
+
+    <string name="save">Сохранить</string>
+</resources>

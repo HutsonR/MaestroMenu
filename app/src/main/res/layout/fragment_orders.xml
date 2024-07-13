@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/backgroundMain"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="14dp"
+    android:orientation="vertical"
+    tools:context=".features.feature_orders.OrdersFragment">
+
+    <include layout="@layout/navbar" android:id="@+id/fragmentToolbar" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/orders_add_button"
+        android:drawableLeft="@drawable/ic_add"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/bottom_sheet_button_background" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

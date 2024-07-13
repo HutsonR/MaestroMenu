@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_corners"
+    android:padding="16dp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Столик №5"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="21sp" />
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Статус: В работе"
+        android:textColor="@color/textGray"
+        android:layout_marginTop="2dp"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/waitings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ожидание: 58 мин."
+        android:textColor="@color/red"
+        android:layout_marginTop="2dp"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/lists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Пицца \nСуши Филадельфия \nВок"
+        android:textColor="@color/black"
+        android:layout_marginTop="6dp"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сумма: 1680 ₽"
+        android:textColor="@color/black"
+        android:layout_marginTop="18dp"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/mainButton"
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/orders_item_btn_take"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/bottom_sheet_button_background" />
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="@string/orders_item_btn_cancel"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/backgroundMain" />
+</LinearLayout>
