@@ -1,4 +1,4 @@
-package com.example.databasexmlcourse.features.feature_menu.dialogs
+package com.example.databasexmlcourse.features.feature_personal.dialogs
 
 import android.os.Bundle
 import android.text.Editable
@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlin.properties.Delegates
 
 
-class MenuDialogRecyclerFragment : DialogFragment() {
+class PersonalDialogRecyclerFragment : DialogFragment() {
     private var _binding: DialogFragmentCategoryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MenuDialogRecyclerViewModel by viewModels()
+    private val viewModel: PersonalDialogRecyclerViewModel by viewModels()
     private var adapter: CompositeAdapter by Delegates.notNull()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,20 +64,20 @@ class MenuDialogRecyclerFragment : DialogFragment() {
         viewModel.action.onEach(::handleActions).collectOnStart(viewLifecycleOwner)
     }
 
-    private fun handleState(state: MenuDialogRecyclerViewModel.State) {
+    private fun handleState(state: PersonalDialogRecyclerViewModel.State) {
         adapter.submitList(state.dataList)
     }
 
-    private fun handleActions(action: MenuDialogRecyclerViewModel.Actions) {
+    private fun handleActions(action: PersonalDialogRecyclerViewModel.Actions) {
         when (action) {
-            is MenuDialogRecyclerViewModel.Actions.GoBackWithItem -> {
+            is PersonalDialogRecyclerViewModel.Actions.GoBackWithItem -> {
                 val bundle = Bundle().apply {
                     putString(KEY_CATEGORY_ITEM, action.text)
                 }
                 activity?.supportFragmentManager?.setFragmentResult(REQ_KEY_CATEGORY_ITEM, bundle)
                 viewModel.goBack()
             }
-            is MenuDialogRecyclerViewModel.Actions.GoBack -> dismiss()
+            is PersonalDialogRecyclerViewModel.Actions.GoBack -> dismiss()
         }
     }
 

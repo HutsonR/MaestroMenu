@@ -1,29 +1,31 @@
-package com.example.databasexmlcourse.features.feature_menu.adapter
+package com.example.databasexmlcourse.features.feature_personal.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.databasexmlcourse.core.composite.CompositeDelegate
 import com.example.databasexmlcourse.core.composite.CompositeItem
 import com.example.databasexmlcourse.databinding.ItemMenuBinding
+import com.example.databasexmlcourse.databinding.ItemPersonalBinding
 import com.example.databasexmlcourse.features.feature_menu.adapter.models.MenuListItem
+import com.example.databasexmlcourse.features.feature_personal.adapter.models.PersonalListItem
 
-class MenuDelegate(
+class PersonalDelegate(
     private val onEditClick: (id: String) -> Unit
-) : CompositeDelegate<MenuListItem.DishListItem, ItemMenuBinding>() {
+) : CompositeDelegate<PersonalListItem.UserListItem, ItemPersonalBinding>() {
 
-    override fun canUseForViewType(item: CompositeItem) = item is MenuListItem.DishListItem
+    override fun canUseForViewType(item: CompositeItem) = item is PersonalListItem.UserListItem
 
     override fun provideBinding(
         inflater: LayoutInflater,
         parent: ViewGroup
-    ) = ItemMenuBinding.inflate(inflater, parent, false)
+    ) = ItemPersonalBinding.inflate(inflater, parent, false)
 
-    override fun ItemMenuBinding.bind(item: MenuListItem.DishListItem) {
+    override fun ItemPersonalBinding.bind(item: PersonalListItem.UserListItem) {
         editButton.setOnClickListener {
             onEditClick(item.id)
         }
         title.text = item.name
-        price.text = "${item.price} ₽"
+        type.text = item.type
     }
 
 }

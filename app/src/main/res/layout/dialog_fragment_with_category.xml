@@ -26,17 +26,18 @@
             android:orientation="vertical"
             android:layout_marginTop="16dp">
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:hint="@string/menu_add_name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:hint="@string/menu_add_name" />
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

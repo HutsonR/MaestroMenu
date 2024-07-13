@@ -12,9 +12,8 @@
     <string name="menu_page_search">Найти блюдо</string>
     <string name="menu_add_name">Название блюда</string>
     <string name="menu_add_price">Цена</string>
-    <string name="menu_add_category">Категория блюда</string>
+    <string name="menu_add_category">Категория</string>
     <string name="menu_add_button">Добавить блюдо в меню</string>
-    <string name="menu_category_search">Найти категорию</string>
     <string name="menu_add_category_button">Добавить категорию</string>
 
     <!--  Orders  -->
@@ -25,6 +24,9 @@
 
     <!--  Personal  -->
     <string name="personal_add_button">Добавить сотрудника</string>
+    <string name="personal_search">Найти сотрудника</string>
+    <string name="personal_fio">ФИО</string>
+    <string name="personal_type">Должность</string>
 
     <string name="menu_main">Главная</string>
     <string name="menu_menu">Меню</string>
@@ -32,5 +34,6 @@
     <string name="menu_personal">Персонал</string>
     <string name="menu_other">Профиль</string>
 
+    <string name="search">Поиск</string>
     <string name="save">Сохранить</string>
 </resources>

@@ -6,15 +6,10 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.DialogFragmentAddCategoryMenuBinding
-import com.example.databasexmlcourse.databinding.DialogFragmentMenuBinding
-import com.example.databasexmlcourse.features.feature_menu.MenuViewModel
 import kotlinx.coroutines.flow.onEach
 
 

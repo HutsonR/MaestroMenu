@@ -1,4 +1,4 @@
-package com.example.databasexmlcourse.features.feature_menu.dialogs
+package com.example.databasexmlcourse.features.feature_personal.dialogs
 
 import androidx.lifecycle.viewModelScope
 import com.example.databasexmlcourse.core.BaseViewModel
@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MenuDialogRecyclerViewModel @Inject constructor(
+class PersonalDialogRecyclerViewModel @Inject constructor(
     // useCase
-) : BaseViewModel<MenuDialogRecyclerViewModel.State, MenuDialogRecyclerViewModel.Actions>(State()) {
+) : BaseViewModel<PersonalDialogRecyclerViewModel.State, PersonalDialogRecyclerViewModel.Actions>(State()) {
 
     private var jobChangeQuerySearch: Job? = null
     private var list: List<MenuCategoryListItem> = emptyList()
@@ -20,8 +20,9 @@ class MenuDialogRecyclerViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             list = listOf(
-                MenuCategoryListItem("1", "Закуски"),
-                MenuCategoryListItem("2", "Напитки")
+                MenuCategoryListItem("1", "Администратор"),
+                MenuCategoryListItem("2", "Менеджер"),
+                MenuCategoryListItem("3", "Официант"),
             )
             modifyState { copy(dataList = list) }
         }
