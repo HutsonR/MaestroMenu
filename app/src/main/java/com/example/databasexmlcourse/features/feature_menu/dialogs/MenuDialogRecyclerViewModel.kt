@@ -2,7 +2,7 @@ package com.example.databasexmlcourse.features.feature_menu.dialogs
 
 import androidx.lifecycle.viewModelScope
 import com.example.databasexmlcourse.core.BaseViewModel
-import com.example.databasexmlcourse.features.feature_menu.adapter.MenuCategoryListItem
+import com.example.databasexmlcourse.features.feature_menu.adapter.models.MenuCategoryListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

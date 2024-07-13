@@ -1,4 +1,4 @@
-package com.example.databasexmlcourse.features.feature_menu.adapter
+package com.example.databasexmlcourse.features.feature_menu.adapter.models
 
 import com.example.databasexmlcourse.core.composite.CompositeItem
 

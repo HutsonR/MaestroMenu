@@ -6,11 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.BaseFragment
@@ -18,14 +14,9 @@ import com.example.databasexmlcourse.core.composite.adapter.CompositeAdapter
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.FragmentMenuBinding
 import com.example.databasexmlcourse.features.feature_menu.adapter.LoadingDelegate
-import com.example.databasexmlcourse.features.feature_menu.adapter.MenuCategoryDelegate
 import com.example.databasexmlcourse.features.feature_menu.adapter.MenuDelegate
-import com.example.databasexmlcourse.features.feature_menu.adapter.MenuListUiConverter
+import com.example.databasexmlcourse.features.feature_menu.adapter.models.MenuListUiConverter
 import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogFragment
-import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogRecyclerFragment.Companion.KEY_CATEGORY_ITEM
-import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogRecyclerFragment.Companion.REQ_KEY_CATEGORY_ITEM
-import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogRecyclerViewModel
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.properties.Delegates
 

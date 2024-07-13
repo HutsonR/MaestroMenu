@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.example.databasexmlcourse.core.composite.CompositeDelegate
 import com.example.databasexmlcourse.core.composite.CompositeItem
 import com.example.databasexmlcourse.databinding.DialogFragmentCategoryItemMenuBinding
+import com.example.databasexmlcourse.features.feature_menu.adapter.models.MenuCategoryListItem
 
 class MenuCategoryDelegate(
     private val onContentClick: (text: String) -> Unit
