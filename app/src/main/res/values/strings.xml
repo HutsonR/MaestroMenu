@@ -36,4 +36,8 @@
 
     <string name="search">Поиск</string>
     <string name="save">Сохранить</string>
+    <!--  Alert  -->
+    <string name="error_title">Ошибка</string>
+    <string name="error_understand">Хорошо</string>
+    <string name="cancel">Отмена</string>
 </resources>
