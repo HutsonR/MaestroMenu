@@ -28,6 +28,9 @@
     <string name="personal_fio">ФИО</string>
     <string name="personal_type">Должность</string>
 
+    <!--  Profile  -->
+    <string name="profile_hello">Здравствуйте,</string>
+
     <string name="menu_main">Главная</string>
     <string name="menu_menu">Меню</string>
     <string name="menu_orders">Заказы</string>
@@ -36,4 +39,14 @@
 
     <string name="search">Поиск</string>
     <string name="save">Сохранить</string>
+
+    <!--  Alert exit  -->
+    <string name="exit_title">Предупреждение</string>
+    <string name="exit_message">Вы уверены, что хотите выйти?</string>
+    <string name="exit">Выйти</string>
+
+    <!--  Alert  -->
+    <string name="error_title">Ошибка</string>
+    <string name="error_understand">Хорошо</string>
+    <string name="cancel">Отмена</string>
 </resources>

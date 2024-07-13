@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.databasexmlcourse.core.models.AlertData
 
 abstract class BaseFragment : Fragment(){
 
@@ -42,12 +43,17 @@ abstract class BaseFragment : Fragment(){
         findNavController().navigateWithAnimation(id, bundle, navBuilder)
     }
 
-    fun showAlert(alertText: String) {
+    fun showAlert(alertData: AlertData) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Ошибка")
-        builder.setMessage(alertText)
-        builder.setPositiveButton("OK") { dialog: DialogInterface, _: Int ->
-            dialog.dismiss()
+        builder.setTitle(getString(alertData.title))
+        builder.setMessage(getString(alertData.message))
+        builder.setPositiveButton(getString(alertData.positiveButton)) { dialog: DialogInterface, _: Int ->
+            alertData.navigate?.invoke() ?: dialog.dismiss()
+        }
+        if (alertData.isNegativeButtonNeeded) {
+            builder.setNegativeButton(getString(alertData.negativeButton)) { dialog: DialogInterface, _: Int ->
+                dialog.dismiss()
+            }
         }
         val alertDialog = builder.create()
         alertDialog.show()
