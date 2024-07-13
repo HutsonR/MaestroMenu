@@ -41,6 +41,8 @@
     <color name="primaryPicker">#BBBBBB</color>
 
     <color name="red">#D54343</color>
+    <color name="lightRed">#FFEEEE</color>
+    <color name="onRedRipple">#FFC4C4</color>
     <color name="green">#83ee7a</color>
 
 </resources>
