@@ -24,8 +24,8 @@ class MenuViewModel @Inject constructor() : BaseViewModel<MenuViewModel.State, M
             modifyState { copy(isLoading = true) }
 
             list = listOf(
-                DishItem(id = "1", name = "Бургер", price = 250, dishCategoryId = "55"),
-                DishItem(id = "2", name = "Пицца Маргаритта", price = 449, dishCategoryId = "2")
+                DishItem(id = "1", name = "Бургер", price = 250, dishCategoryId = "55", count = 0),
+                DishItem(id = "2", name = "Пицца Маргаритта", price = 449, dishCategoryId = "2", count = 0)
             )
             modifyState {
                 copy(

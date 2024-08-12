@@ -50,6 +50,7 @@ class PersonalFragment : BaseFragment() {
 
     private fun initializeNavBar() {
         binding.fragmentToolbar.toolbar.title = getString(R.string.menu_personal)
+        binding.fragmentToolbar.toolbar.navigationIcon = null
     }
 
     private fun setRecycler() {

@@ -30,6 +30,7 @@ class HomeFragment : BaseFragment() {
 
     private fun initializeNavBar() {
         binding.fragmentToolbar.toolbar.title = getString(R.string.app_name)
+        binding.fragmentToolbar.toolbar.navigationIcon = null
     }
 
 }

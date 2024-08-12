@@ -49,7 +49,8 @@ class MenuFragment : BaseFragment() {
     }
 
     private fun initializeNavBar() {
-        binding.fragmentToolbar.toolbar.title = getString(R.string.menu_menu)
+        binding.fragmentToolbar.toolbar.title = getString(R.string.orders_add_title)
+        binding.fragmentToolbar.toolbar.navigationIcon = null
     }
 
     private fun setRecycler() {

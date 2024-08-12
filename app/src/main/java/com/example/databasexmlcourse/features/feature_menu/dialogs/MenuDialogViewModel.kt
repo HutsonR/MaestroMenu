@@ -2,6 +2,7 @@ package com.example.databasexmlcourse.features.feature_menu.dialogs
 
 import com.example.databasexmlcourse.core.BaseViewModel
 import com.example.databasexmlcourse.domain.models.DishItem
+import com.example.databasexmlcourse.features.common.dialogs.adapter.models.DialogSearcherModel
 import com.example.databasexmlcourse.features.util.DialogPurposes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -10,6 +11,12 @@ import javax.inject.Inject
 class MenuDialogViewModel @Inject constructor(
     // useCase
 ) : BaseViewModel<MenuDialogViewModel.State, MenuDialogViewModel.Actions>(State()) {
+
+    val categoryList = listOf(
+        DialogSearcherModel("1", "Закуски"),
+        DialogSearcherModel("2", "Горячие блюда"),
+        DialogSearcherModel("3", "Десерты")
+    )
 
     fun openCategoryDialog() {
         onAction(Actions.OpenCategoryDialog)

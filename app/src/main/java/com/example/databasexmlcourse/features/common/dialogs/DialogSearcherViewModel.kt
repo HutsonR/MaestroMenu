@@ -1,7 +1,8 @@
-package com.example.databasexmlcourse.features.feature_personal.dialogs
+package com.example.databasexmlcourse.features.common.dialogs
 
 import androidx.lifecycle.viewModelScope
 import com.example.databasexmlcourse.core.BaseViewModel
+import com.example.databasexmlcourse.features.common.dialogs.adapter.models.DialogSearcherModel
 import com.example.databasexmlcourse.features.feature_menu.adapter.models.MenuCategoryListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -10,20 +11,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PersonalDialogRecyclerViewModel @Inject constructor(
+class DialogSearcherViewModel @Inject constructor(
     // useCase
-) : BaseViewModel<PersonalDialogRecyclerViewModel.State, PersonalDialogRecyclerViewModel.Actions>(State()) {
+) : BaseViewModel<DialogSearcherViewModel.State, DialogSearcherViewModel.Actions>(State()) {
 
     private var jobChangeQuerySearch: Job? = null
-    private var list: List<MenuCategoryListItem> = emptyList()
+    private var list: List<DialogSearcherModel> = emptyList()
 
-    init {
+    fun init(list: List<DialogSearcherModel>) {
+        this.list = list
         viewModelScope.launch {
-            list = listOf(
-                MenuCategoryListItem("1", "Администратор"),
-                MenuCategoryListItem("2", "Менеджер"),
-                MenuCategoryListItem("3", "Официант"),
-            )
             modifyState { copy(dataList = list) }
         }
     }
@@ -51,9 +48,9 @@ class PersonalDialogRecyclerViewModel @Inject constructor(
     }
 
     private fun filterItemsByName(
-        list: List<MenuCategoryListItem>,
+        list: List<DialogSearcherModel>,
         querySearch: String
-    ): List<MenuCategoryListItem> {
+    ): List<DialogSearcherModel> {
         return if (querySearch.isEmpty()) {
             list
         } else {
@@ -64,7 +61,7 @@ class PersonalDialogRecyclerViewModel @Inject constructor(
     }
 
     data class State(
-        val dataList: List<MenuCategoryListItem> = emptyList(),
+        val dataList: List<DialogSearcherModel> = emptyList(),
         val query: String = "",
     )
 

@@ -43,6 +43,7 @@ class ProfileFragment : BaseFragment() {
 
     private fun initializeNavBar() {
         binding.fragmentToolbar.toolbar.title = getString(R.string.menu_other)
+        binding.fragmentToolbar.toolbar.navigationIcon = null
     }
 
     private fun setListeners() {
@@ -57,9 +58,9 @@ class ProfileFragment : BaseFragment() {
         when (action) {
             is ProfileViewModel.Actions.ShowAlert -> showAlert(
                 AlertData(
-                    title = R.string.exit_title,
-                    message = R.string.exit_message,
-                    positiveButton = R.string.exit,
+                    title = R.string.alert_profile_exit_title,
+                    message = R.string.alert_profile_exit_message,
+                    positiveButton = R.string.alert_profile_exit,
                     isNegativeButtonNeeded = true,
                     navigate = { viewModel.onConfirmExitClick() }
                 )

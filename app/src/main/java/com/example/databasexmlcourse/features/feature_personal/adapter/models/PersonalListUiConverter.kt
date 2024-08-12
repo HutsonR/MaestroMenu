@@ -7,7 +7,7 @@ internal class PersonalListUiConverter {
     fun convertToPersonalListItem(items: List<PersonalItem>, isLoading: Boolean): List<PersonalListItem> {
         return mutableListOf<PersonalListItem>().apply {
             for (item in items) {
-                add(convertToPersonalListItem(item))
+                add(item.convertToPersonalListItem())
             }
 
             if (isLoading) {
@@ -16,10 +16,10 @@ internal class PersonalListUiConverter {
         }
     }
 
-    private fun convertToPersonalListItem(item: PersonalItem): PersonalListItem =
+    private fun PersonalItem.convertToPersonalListItem() =
         PersonalListItem.UserListItem(
-            id = item.id,
-            name = item.name,
-            type = item.type
+            id = this.id,
+            name = this.name,
+            type = this.type
         )
 }

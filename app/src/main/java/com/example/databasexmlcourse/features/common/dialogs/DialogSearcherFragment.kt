@@ -1,4 +1,4 @@
-package com.example.databasexmlcourse.features.feature_menu.dialogs
+package com.example.databasexmlcourse.features.common.dialogs
 
 import android.os.Bundle
 import android.text.Editable
@@ -12,16 +12,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.databasexmlcourse.core.composite.adapter.CompositeAdapter
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.DialogFragmentCategoryBinding
+import com.example.databasexmlcourse.features.common.dialogs.adapter.DialogSearcherDelegate
+import com.example.databasexmlcourse.features.common.dialogs.adapter.models.DialogSearcherListUiConverter
+import com.example.databasexmlcourse.features.common.dialogs.adapter.models.DialogSearcherModel
 import com.example.databasexmlcourse.features.feature_menu.adapter.MenuCategoryDelegate
 import kotlinx.coroutines.flow.onEach
 import kotlin.properties.Delegates
 
 
-class MenuDialogRecyclerFragment : DialogFragment() {
+class DialogSearcherFragment(
+    private val list: List<DialogSearcherModel>,
+    private val onItemClick: (text: String) -> Unit
+) : DialogFragment() {
     private var _binding: DialogFragmentCategoryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MenuDialogRecyclerViewModel by viewModels()
+    private val viewModel: DialogSearcherViewModel by viewModels()
     private var adapter: CompositeAdapter by Delegates.notNull()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,6 +48,7 @@ class MenuDialogRecyclerFragment : DialogFragment() {
     }
 
     private fun initialize() {
+        viewModel.init(list)
         binding.closeButton.setOnClickListener {
             viewModel.goBack()
         }
@@ -52,7 +59,7 @@ class MenuDialogRecyclerFragment : DialogFragment() {
     private fun setRecycler() {
         adapter = CompositeAdapter
             .Builder()
-            .add(MenuCategoryDelegate(viewModel::onItemClick))
+            .add(DialogSearcherDelegate(viewModel::onItemClick))
             .build()
 
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
@@ -64,20 +71,18 @@ class MenuDialogRecyclerFragment : DialogFragment() {
         viewModel.action.onEach(::handleActions).collectOnStart(viewLifecycleOwner)
     }
 
-    private fun handleState(state: MenuDialogRecyclerViewModel.State) {
-        adapter.submitList(state.dataList)
+    private fun handleState(state: DialogSearcherViewModel.State) {
+        val list = DialogSearcherListUiConverter().convertToListItem(state.dataList)
+        adapter.submitList(list)
     }
 
-    private fun handleActions(action: MenuDialogRecyclerViewModel.Actions) {
+    private fun handleActions(action: DialogSearcherViewModel.Actions) {
         when (action) {
-            is MenuDialogRecyclerViewModel.Actions.GoBackWithItem -> {
-                val bundle = Bundle().apply {
-                    putString(KEY_CATEGORY_ITEM, action.text)
-                }
-                activity?.supportFragmentManager?.setFragmentResult(REQ_KEY_CATEGORY_ITEM, bundle)
+            is DialogSearcherViewModel.Actions.GoBackWithItem -> {
+                onItemClick(action.text)
                 viewModel.goBack()
             }
-            is MenuDialogRecyclerViewModel.Actions.GoBack -> dismiss()
+            is DialogSearcherViewModel.Actions.GoBack -> dismiss()
         }
     }
 
@@ -94,10 +99,5 @@ class MenuDialogRecyclerFragment : DialogFragment() {
                 viewModel.onChangeQuerySearch(s.toString())
             }
         })
-    }
-
-    companion object {
-        const val REQ_KEY_CATEGORY_ITEM = "REQ_KEY_DIALOG_CATEGORY_ITEM"
-        const val KEY_CATEGORY_ITEM = "KEY_DIALOG_CATEGORY_ITEM"
     }
 }

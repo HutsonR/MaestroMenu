@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.DialogFragmentWithCategoryBinding
-import com.example.databasexmlcourse.domain.models.DishItem
 import com.example.databasexmlcourse.domain.models.PersonalItem
+import com.example.databasexmlcourse.features.common.dialogs.DialogSearcherFragment
 import kotlinx.coroutines.flow.onEach
 
 
@@ -81,13 +81,14 @@ class PersonalDialogFragment : DialogFragment() {
 
     private fun handleActions(action: PersonalDialogViewModel.Actions) {
         when (action) {
-            is PersonalDialogViewModel.Actions.OpenCategoryDialog -> PersonalDialogRecyclerFragment().show(childFragmentManager, "personal category view fragment")
+            is PersonalDialogViewModel.Actions.OpenCategoryDialog -> DialogSearcherFragment(viewModel.categoryList){
+                viewModel.updateCategory(it)
+            }.show(childFragmentManager, "personal category view fragment")
             is PersonalDialogViewModel.Actions.GoBack -> dismiss()
         }
     }
 
     private fun setListeners() {
-        setFragmentListener()
         nameListener()
         categoryButtonListener()
     }
@@ -104,19 +105,6 @@ class PersonalDialogFragment : DialogFragment() {
     }
 
 //    Listeners
-    private fun setFragmentListener() {
-        // Из MenuDialogRecyclerFragment
-        activity?.supportFragmentManager?.setFragmentResultListener(
-            PersonalDialogRecyclerFragment.REQ_KEY_CATEGORY_ITEM,
-            this
-        ) { _, bundle ->
-            val requestValue: String? = bundle.getString(PersonalDialogRecyclerFragment.KEY_CATEGORY_ITEM)
-            requestValue?.let {
-                viewModel.updateCategory(requestValue)
-            }
-        }
-    }
-
     private fun nameListener() {
         binding.nameET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
