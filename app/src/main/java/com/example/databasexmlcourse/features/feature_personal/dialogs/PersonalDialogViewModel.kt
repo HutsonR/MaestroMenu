@@ -3,6 +3,7 @@ package com.example.databasexmlcourse.features.feature_personal.dialogs
 import com.example.databasexmlcourse.core.BaseViewModel
 import com.example.databasexmlcourse.domain.models.DishItem
 import com.example.databasexmlcourse.domain.models.PersonalItem
+import com.example.databasexmlcourse.features.common.dialogs.adapter.models.DialogSearcherModel
 import com.example.databasexmlcourse.features.util.DialogPurposes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -12,6 +13,12 @@ class PersonalDialogViewModel @Inject constructor(
     // useCase
 ) : BaseViewModel<PersonalDialogViewModel.State, PersonalDialogViewModel.Actions>(State()) {
 
+    val categoryList = listOf(
+        DialogSearcherModel("1", "Официант"),
+        DialogSearcherModel("2", "Менеджер"),
+        DialogSearcherModel("3", "Администратор")
+    )
+
     fun openCategoryDialog() {
         onAction(Actions.OpenCategoryDialog)
     }
@@ -19,10 +26,10 @@ class PersonalDialogViewModel @Inject constructor(
     fun onActionButtonClick() {
         when(getState().purpose) {
             DialogPurposes.ADD -> {
-                // TODO Добавить блюдо в меню
+                // TODO Добавить пользователя
             }
             DialogPurposes.EDIT -> {
-                // TODO Изменить блюдо в меню
+                // TODO Изменить пользователя
             }
         }
     }

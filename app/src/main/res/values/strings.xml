@@ -15,12 +15,24 @@
     <string name="menu_add_category">Категория</string>
     <string name="menu_add_button">Добавить блюдо в меню</string>
     <string name="menu_add_category_button">Добавить категорию</string>
+    <string name="ruble">₽</string>
 
     <!--  Orders  -->
+    <string name="orders_add_title">Создание заказа</string>
     <string name="orders_add_button">Создать заказ</string>
+    <string name="orders_table">Столик №</string>
+    <string name="orders_amount">Сумма:</string>
+    <string name="orders_status">Статус:</string>
+    <string name="orders_await">Ожидание:</string>
+    <string name="orders_await_time">мин.</string>
     <string name="orders_item_btn_take">Принять заказ</string>
     <string name="orders_item_btn_finish">Завершить</string>
     <string name="orders_item_btn_cancel">Отменить</string>
+    <!--  Create order  -->
+    <string name="order_add_choose_table">Выберите столик</string>
+    <string name="order_add_choose_category">Выберите категорию</string>
+    <string name="order_add_table">Cтол:</string>
+    <string name="order_add_category">Категория:</string>
 
     <!--  Personal  -->
     <string name="personal_add_button">Добавить сотрудника</string>
@@ -41,9 +53,14 @@
     <string name="save">Сохранить</string>
 
     <!--  Alert exit  -->
-    <string name="exit_title">Предупреждение</string>
-    <string name="exit_message">Вы уверены, что хотите выйти?</string>
-    <string name="exit">Выйти</string>
+    <string name="alert_profile_exit_title">Предупреждение</string>
+    <string name="alert_profile_exit_message">Вы уверены, что хотите выйти?</string>
+    <string name="alert_profile_exit">Выйти</string>
+
+    <!--  Alert delete order  -->
+    <string name="alert_order_cancel_title">Предупреждение</string>
+    <string name="alert_order_cancel_message">Вы действительно хотите удалить заказ?</string>
+    <string name="alert_order_cancel_confirm">Удалить</string>
 
     <!--  Alert  -->
     <string name="error_title">Ошибка</string>

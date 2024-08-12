@@ -4,10 +4,10 @@ import com.example.databasexmlcourse.domain.models.DishItem
 
 internal class MenuListUiConverter {
 
-    fun convertToMenuListItem(dishes: List<DishItem>, isLoading: Boolean): List<MenuListItem> {
+    fun convertToMenuListItem(items: List<DishItem>, isLoading: Boolean): List<MenuListItem> {
         return mutableListOf<MenuListItem>().apply {
-            for (dish in dishes) {
-                add(convertToMenuListItem(dish))
+            for (item in items) {
+                add(item.convertToMenuListItem())
             }
 
             if (isLoading) {
@@ -16,11 +16,11 @@ internal class MenuListUiConverter {
         }
     }
 
-    private fun convertToMenuListItem(dish: DishItem): MenuListItem =
+    private fun DishItem.convertToMenuListItem() =
         MenuListItem.DishListItem(
-            id = dish.id,
-            name = dish.name,
-            price = dish.price,
-            category = dish.dishCategoryId
+            id = this.id,
+            name = this.name,
+            price = this.price,
+            category = this.dishCategoryId
         )
 }

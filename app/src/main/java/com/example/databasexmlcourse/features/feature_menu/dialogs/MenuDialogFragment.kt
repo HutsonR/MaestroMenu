@@ -12,6 +12,8 @@ import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.DialogFragmentWithCategoryBinding
 import com.example.databasexmlcourse.domain.models.DishItem
+import com.example.databasexmlcourse.features.common.dialogs.DialogSearcherFragment
+import com.example.databasexmlcourse.features.common.dialogs.DialogSearcherViewModel
 import kotlinx.coroutines.flow.onEach
 
 
@@ -75,15 +77,15 @@ class MenuDialogFragment : DialogFragment() {
 
     private fun handleActions(action: MenuDialogViewModel.Actions) {
         when (action) {
-            is MenuDialogViewModel.Actions.OpenCategoryDialog -> MenuDialogRecyclerFragment()
-                .show(childFragmentManager, "menu category view fragment")
+            is MenuDialogViewModel.Actions.OpenCategoryDialog -> DialogSearcherFragment(viewModel.categoryList) {
+                viewModel.updateCategory(it)
+            }.show(childFragmentManager, "menu category view fragment")
             is MenuDialogViewModel.Actions.OpenAddCategoryDialog -> MenuDialogAddCategoryFragment().show(childFragmentManager, "menu add category view fragment")
             is MenuDialogViewModel.Actions.GoBack -> dismiss()
         }
     }
 
     private fun setListeners() {
-        setFragmentListener()
         nameListener()
         priceListener()
         categoryButtonListener()
@@ -102,19 +104,6 @@ class MenuDialogFragment : DialogFragment() {
     }
 
 //    Listeners
-    private fun setFragmentListener() {
-        // Из MenuDialogRecyclerFragment
-        activity?.supportFragmentManager?.setFragmentResultListener(
-            MenuDialogRecyclerFragment.REQ_KEY_CATEGORY_ITEM,
-            this
-        ) { _, bundle ->
-            val requestValue: String? = bundle.getString(MenuDialogRecyclerFragment.KEY_CATEGORY_ITEM)
-            requestValue?.let {
-                viewModel.updateCategory(requestValue)
-            }
-        }
-    }
-
     private fun nameListener() {
         binding.nameET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit

@@ -2,6 +2,7 @@ package com.example.databasexmlcourse.features.feature_menu.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.composite.CompositeDelegate
 import com.example.databasexmlcourse.core.composite.CompositeItem
 import com.example.databasexmlcourse.databinding.ItemMenuBinding
@@ -23,7 +24,11 @@ class MenuDelegate(
             onEditClick(item.id)
         }
         title.text = item.name
-        price.text = "${item.price} ₽"
+        price.text = String.format(
+            "%s %s",
+            item.price,
+            root.context.getString(R.string.ruble)
+        )
     }
 
 }

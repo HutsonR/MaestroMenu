@@ -28,6 +28,7 @@
 
     <!--  Bottom Dialog Sheet  -->
     <color name="bottom_sheet_background">#16171B</color>
+    <color name="onButtonRipple">#2E333E</color>
     <color name="bottom_sheet_button_background">#24272E</color>
     <color name="bottom_sheet_divider">#DBDBDB</color>
 
@@ -41,8 +42,8 @@
     <color name="primaryPicker">#BBBBBB</color>
 
     <color name="red">#D54343</color>
-    <color name="lightRed">#FFEEEE</color>
-    <color name="onRedRipple">#FFC4C4</color>
+    <color name="lightRed">#2A2626</color>
+    <color name="onRedRipple">#382C2C</color>
     <color name="green">#83ee7a</color>
 
 </resources>

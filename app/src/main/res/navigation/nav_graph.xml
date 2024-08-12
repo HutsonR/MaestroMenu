@@ -10,25 +10,36 @@
         android:name="com.example.databasexmlcourse.features.feature_home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
+
     <fragment
         android:id="@+id/menuFragment"
         android:name="com.example.databasexmlcourse.features.feature_menu.MenuFragment"
-        android:label="Home"
+        android:label="Menu"
         tools:layout="@layout/fragment_menu" />
+
     <fragment
         android:id="@+id/ordersFragment"
         android:name="com.example.databasexmlcourse.features.feature_orders.OrdersFragment"
-        android:label="Home"
+        android:label="Orders"
         tools:layout="@layout/fragment_orders" />
+    <fragment
+        android:id="@+id/orderAddFragment"
+        android:name="com.example.databasexmlcourse.features.feature_orders.add.OrderAddFragment"
+        android:label="OrdersAdd"
+        tools:layout="@layout/dialog_fragment_orders" />
+    <action android:id="@+id/action_ordersFragment_to_orderAddFragment"
+        app:destination="@id/orderAddFragment" />
+
     <fragment
         android:id="@+id/personalFragment"
         android:name="com.example.databasexmlcourse.features.feature_personal.PersonalFragment"
-        android:label="Home"
+        android:label="Personal"
         tools:layout="@layout/fragment_personal" />
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.databasexmlcourse.features.feature_profile.ProfileFragment"
-        android:label="Home"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

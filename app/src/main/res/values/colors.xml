@@ -28,6 +28,7 @@
 
     <!--  Bottom Dialog Sheet  -->
     <color name="bottom_sheet_background">#FFFFFF</color>
+    <color name="onButtonRipple">#E0E0E0</color>
     <color name="bottom_sheet_button_background">#EBEBEB</color>
     <color name="bottom_sheet_divider">#CDCDCD</color>
 
