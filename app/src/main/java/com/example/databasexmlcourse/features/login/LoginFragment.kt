@@ -66,17 +66,19 @@ class LoginFragment : BaseFragment() {
 
     private fun handleActions(action: LoginViewModel.Actions) {
         when (action) {
-            is LoginViewModel.Actions.ShowFailedAlert -> showAlert(
-                AlertData(
-                    title = R.string.error_title,
-                    message = R.string.login_error_alert
+            is LoginViewModel.Actions.ShowFailedAlert -> {
+                showAlert(
+                    AlertData(
+                        title = R.string.error_title,
+                        message = R.string.login_error_alert
+                    )
                 )
-            )
+                SecurePreferences(requireContext()).remove(AUTH_USER_ID)
+            }
             is LoginViewModel.Actions.LoginSuccess -> {
                 SecurePreferences(requireContext()).put(AUTH_USER_ID, action.userId)
                 navigateTo(R.id.action_to_homeFragment)
             }
-
             is LoginViewModel.Actions.GoToHome -> navigateTo(R.id.action_to_homeFragment)
         }
     }

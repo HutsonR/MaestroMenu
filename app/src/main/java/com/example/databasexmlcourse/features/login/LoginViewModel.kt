@@ -17,9 +17,7 @@ class LoginViewModel @Inject constructor(
 
     fun onLoginButtonClick() {
         viewModelScope.launch {
-            val result = usersUseCase.checkUser(getState().username, getState().password)
-            Log.d("debugTag", "result: $result")
-            when (result) {
+            when (val result = usersUseCase.checkUser(getState().username, getState().password)) {
                 is Resource.Success<*> -> {
                     onAction(Actions.LoginSuccess(result.data.toString()))
                 }
@@ -33,9 +31,10 @@ class LoginViewModel @Inject constructor(
     fun checkAuth(userId: String) {
         viewModelScope.launch {
             val result = usersUseCase.checkUserById(userId)
-            Log.d("debugTag", "checkAuth result: $result")
             if (result) {
                 onAction(Actions.GoToHome)
+            } else {
+                onAction(Actions.ShowFailedAlert)
             }
         }
     }
