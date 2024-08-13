@@ -19,7 +19,7 @@ internal class PersonalListUiConverter {
     private fun PersonalItem.convertToPersonalListItem() =
         PersonalListItem.UserListItem(
             id = this.id,
-            name = this.name,
+            name = this.fio,
             type = this.type
         )
 }

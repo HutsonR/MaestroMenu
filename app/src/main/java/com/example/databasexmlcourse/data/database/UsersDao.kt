@@ -11,15 +11,21 @@ interface UsersDao {
     @Insert
     suspend fun insert(item: UsersEntity)
 
+    @Query("SELECT * FROM users WHERE username = :username AND password = :password")
+    suspend fun checkUser(username: String, password: String): UsersEntity?
+
+    @Query("SELECT COUNT(*) > 0 FROM users WHERE id = :userId")
+    suspend fun checkUserById(userId: String): Boolean
+
     @Query("SELECT * FROM users ORDER BY id DESC")
-    fun getAll(): List<UsersEntity>
+    suspend fun getAll(): List<UsersEntity>
 
     @Query("DELETE FROM users WHERE id = :itemId")
-    suspend fun deleteById(itemId: Int)
+    suspend fun deleteById(itemId: String)
 
     @Query("DELETE FROM users")
     suspend fun deleteAll()
 
     @Update
-    fun update(item: UsersEntity)
+    suspend fun update(item: UsersEntity)
 }

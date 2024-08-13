@@ -63,6 +63,7 @@ dependencies {
 //    kapt(libs.dagger.compiler.kapt)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.security.crypto)
     kapt(libs.hilt.android.compiler)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

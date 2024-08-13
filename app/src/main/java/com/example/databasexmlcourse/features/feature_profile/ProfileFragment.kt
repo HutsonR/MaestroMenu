@@ -9,10 +9,12 @@ import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.BaseFragment
 import com.example.databasexmlcourse.core.models.AlertData
 import com.example.databasexmlcourse.core.utils.collectOnStart
+import com.example.databasexmlcourse.databinding.FragmentLoginBinding
 import com.example.databasexmlcourse.databinding.FragmentProfileBinding
 import com.example.databasexmlcourse.features.feature_personal.PersonalViewModel
 import com.example.databasexmlcourse.features.feature_personal.adapter.models.PersonalListUiConverter
 import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment
+import com.example.databasexmlcourse.features.login.LoginFragment
 import kotlinx.coroutines.flow.onEach
 
 class ProfileFragment : BaseFragment() {
@@ -48,6 +50,7 @@ class ProfileFragment : BaseFragment() {
 
     private fun setListeners() {
         binding.exitButton.setOnClickListener { viewModel.onExitButtonClick() }
+        binding.loginButton.setOnClickListener { navigateTo(R.id.action_to_loginFragment) }
     }
 
     private fun setObservers() {

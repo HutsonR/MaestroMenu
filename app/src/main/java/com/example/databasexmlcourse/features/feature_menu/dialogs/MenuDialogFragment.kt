@@ -10,21 +10,20 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.utils.collectOnStart
-import com.example.databasexmlcourse.databinding.DialogFragmentWithCategoryBinding
+import com.example.databasexmlcourse.databinding.DialogMenuFragmentBinding
 import com.example.databasexmlcourse.domain.models.DishItem
 import com.example.databasexmlcourse.features.common.dialogs.DialogSearcherFragment
-import com.example.databasexmlcourse.features.common.dialogs.DialogSearcherViewModel
 import kotlinx.coroutines.flow.onEach
 
 
 class MenuDialogFragment : DialogFragment() {
-    private var _binding: DialogFragmentWithCategoryBinding? = null
+    private var _binding: DialogMenuFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MenuDialogViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = DialogFragmentWithCategoryBinding.inflate(inflater, container, false)
+        _binding = DialogMenuFragmentBinding.inflate(inflater, container, false)
         return _binding?.root
     }
 

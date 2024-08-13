@@ -10,20 +10,23 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.utils.collectOnStart
-import com.example.databasexmlcourse.databinding.DialogFragmentWithCategoryBinding
+import com.example.databasexmlcourse.databinding.DialogPersonalFragmentBinding
 import com.example.databasexmlcourse.domain.models.PersonalItem
 import com.example.databasexmlcourse.features.common.dialogs.DialogSearcherFragment
+import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogAddCategoryFragment
+import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
-
+@AndroidEntryPoint
 class PersonalDialogFragment : DialogFragment() {
-    private var _binding: DialogFragmentWithCategoryBinding? = null
+    private var _binding: DialogPersonalFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: PersonalDialogViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = DialogFragmentWithCategoryBinding.inflate(inflater, container, false)
+        _binding = DialogPersonalFragmentBinding.inflate(inflater, container, false)
         return _binding?.root
     }
 
@@ -40,12 +43,6 @@ class PersonalDialogFragment : DialogFragment() {
     }
 
     private fun initialize() {
-        binding.nameLayout.hint = getString(R.string.personal_fio)
-        binding.priceET.visibility = View.GONE
-        binding.categoryButton.text = getString(R.string.personal_type)
-        binding.addCategoryButton.visibility = View.GONE
-        binding.saveButton.text = getString(R.string.personal_add_button)
-
         parseArguments()
         binding.saveButton.setOnClickListener {
             viewModel.onActionButtonClick()
@@ -61,7 +58,9 @@ class PersonalDialogFragment : DialogFragment() {
         val item = arguments?.getParcelable<PersonalItem>(PARCEL_ITEM)
         item?.let {
             with(binding) {
-                nameET.setText(it.name)
+                fioET.setText(it.fio)
+                loginET.setText(it.login)
+                passwordET.setText(it.password)
                 categoryButton.text = it.type
                 saveButton.text = getString(R.string.save)
             }
@@ -75,22 +74,27 @@ class PersonalDialogFragment : DialogFragment() {
     }
 
     private fun handleState(state: PersonalDialogViewModel.State) {
-        updateCategoryTextButton(state.category)
+        updateCategoryTextButton(state.category?.name ?: "")
         updateSaveButtonState(state.isSaveButtonEnable)
     }
 
     private fun handleActions(action: PersonalDialogViewModel.Actions) {
         when (action) {
-            is PersonalDialogViewModel.Actions.OpenCategoryDialog -> DialogSearcherFragment(viewModel.categoryList){
+            is PersonalDialogViewModel.Actions.OpenCategoryDialog -> DialogSearcherFragment(viewModel.getCategories()){
                 viewModel.updateCategory(it)
             }.show(childFragmentManager, "personal category view fragment")
+            is PersonalDialogViewModel.Actions.OpenAddCategoryDialog -> PersonalDialogAddCategoryFragment().show(childFragmentManager, "personal add category view fragment")
             is PersonalDialogViewModel.Actions.GoBack -> dismiss()
+            is PersonalDialogViewModel.Actions.ShowFailedText -> binding.addError.visibility = View.VISIBLE
         }
     }
 
     private fun setListeners() {
         nameListener()
+        loginListener()
+        passwordListener()
         categoryButtonListener()
+        addCategoryButtonListener()
     }
 
     private fun updateCategoryTextButton(text: String) {
@@ -106,10 +110,30 @@ class PersonalDialogFragment : DialogFragment() {
 
 //    Listeners
     private fun nameListener() {
-        binding.nameET.addTextChangedListener(object : TextWatcher {
+        binding.fioET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.updateText(s.toString())
+                viewModel.updateFio(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+    }
+
+    private fun loginListener() {
+        binding.loginET.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.updateLogin(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+    }
+
+    private fun passwordListener() {
+        binding.passwordET.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.updatePassword(s.toString())
             }
             override fun afterTextChanged(s: Editable?) = Unit
         })
@@ -117,6 +141,10 @@ class PersonalDialogFragment : DialogFragment() {
 
     private fun categoryButtonListener() {
         binding.categoryButton.setOnClickListener { viewModel.openCategoryDialog() }
+    }
+
+    private fun addCategoryButtonListener() {
+        binding.addCategoryButton.setOnClickListener { viewModel.openAddCategoryDialog() }
     }
 
     companion object {
