@@ -17,6 +17,7 @@ constraintlayout = "2.1.4"
 room = "2.6.1"
 hilt = "2.51"
 securityCrypto = "1.0.0"
+springSecurityCrypto = "5.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,7 +52,13 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+
+# Security
+# Crypto SharedPreference
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
+# Password hash
+spring-security-crypto = { group = "org.springframework.security", name = "spring-security-crypto", version.ref = "springSecurityCrypto" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

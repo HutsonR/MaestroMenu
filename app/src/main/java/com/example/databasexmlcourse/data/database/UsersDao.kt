@@ -11,8 +11,8 @@ interface UsersDao {
     @Insert
     suspend fun insert(item: UsersEntity)
 
-    @Query("SELECT * FROM users WHERE username = :username AND password = :password")
-    suspend fun checkUser(username: String, password: String): UsersEntity?
+    @Query("SELECT * FROM users WHERE username = :username")
+    suspend fun checkUser(username: String): List<UsersEntity?>
 
     @Query("SELECT COUNT(*) > 0 FROM users WHERE id = :userId")
     suspend fun checkUserById(userId: String): Boolean

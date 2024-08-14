@@ -18,9 +18,9 @@ class UsersRepositoryImpl @Inject constructor (
         usersDao.insert(item.asEntity())
     }
 
-    override suspend fun checkUser(username: String, password: String): User? = withContext(Dispatchers.IO) {
-        val userEntity: UsersEntity? = usersDao.checkUser(username, password)
-        userEntity?.asExternalModel()
+    override suspend fun checkUser(username: String): List<User?> = withContext(Dispatchers.IO) {
+        val usersEntities = usersDao.checkUser(username)
+        usersEntities.map { it?.asExternalModel() }
     }
 
     override suspend fun checkUserById(userId: String): Boolean = withContext(Dispatchers.IO) {
