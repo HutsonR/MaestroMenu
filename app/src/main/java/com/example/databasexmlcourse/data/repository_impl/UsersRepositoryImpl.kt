@@ -27,6 +27,11 @@ class UsersRepositoryImpl @Inject constructor (
         usersDao.checkUserById(userId)
     }
 
+    override suspend fun getUserById(userId: String): User? = withContext(Dispatchers.IO) {
+        val userEntity: UsersEntity? = usersDao.getUserById(userId)
+        userEntity?.asExternalModel()
+    }
+
     override suspend fun getAll(): List<User> = withContext(Dispatchers.IO) {
         val usersEntities: List<UsersEntity> = usersDao.getAll()
         usersEntities.map { it.asExternalModel() }

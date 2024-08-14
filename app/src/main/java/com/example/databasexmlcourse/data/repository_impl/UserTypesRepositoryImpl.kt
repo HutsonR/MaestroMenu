@@ -17,6 +17,11 @@ class UserTypesRepositoryImpl @Inject constructor (
         userTypesDao.insert(item.asEntity())
     }
 
+    override suspend fun getTypeById(itemId: String): UserType? = withContext(Dispatchers.IO) {
+        val userTypeEntity = userTypesDao.getTypeById(itemId)
+        userTypeEntity.asExternalModel()
+    }
+
     override suspend fun getAll(): List<UserType> = withContext(Dispatchers.IO) {
         val userTypesEntities = userTypesDao.getAll()
         userTypesEntities.map { it.asExternalModel() }

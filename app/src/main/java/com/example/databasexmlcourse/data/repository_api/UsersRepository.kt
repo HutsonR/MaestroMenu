@@ -9,6 +9,8 @@ interface UsersRepository {
 
     suspend fun checkUserById(userId: String): Boolean
 
+    suspend fun getUserById(userId: String): User?
+
     suspend fun getAll(): List<User>
 
     suspend fun deleteById(itemId: String)

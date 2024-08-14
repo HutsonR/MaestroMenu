@@ -29,6 +29,15 @@ class UsersUseCaseImpl @Inject constructor (
     override suspend fun checkUserById(userId: String): Boolean =
         usersRepository.checkUserById(userId)
 
+    override suspend fun getUserById(userId: String): Resource {
+        val user = usersRepository.getUserById(userId)
+        return if (user != null) {
+            Resource.Success(user)
+        } else {
+            Resource.Failed(Exception("User not found"))
+        }
+    }
+
     override suspend fun getAll(): List<User> {
         return usersRepository.getAll()
     }

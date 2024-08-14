@@ -12,6 +12,9 @@ interface UserTypesDao {
     @Insert
     suspend fun insert(item: UsersTypesEntity)
 
+    @Query("SELECT * FROM users_types WHERE id = :itemId")
+    suspend fun getTypeById(itemId: String): UsersTypesEntity
+
     @Query("SELECT * FROM users_types ORDER BY id DESC")
     suspend fun getAll(): List<UsersTypesEntity>
 

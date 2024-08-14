@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.databasexmlcourse.R
 import com.example.databasexmlcourse.core.BaseFragment
+import com.example.databasexmlcourse.core.SecurePreferences
 import com.example.databasexmlcourse.core.models.AlertData
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.FragmentLoginBinding
@@ -15,8 +16,11 @@ import com.example.databasexmlcourse.features.feature_personal.PersonalViewModel
 import com.example.databasexmlcourse.features.feature_personal.adapter.models.PersonalListUiConverter
 import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment
 import com.example.databasexmlcourse.features.login.LoginFragment
+import com.example.databasexmlcourse.features.login.LoginFragment.Companion.AUTH_USER_ID
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -40,6 +44,7 @@ class ProfileFragment : BaseFragment() {
 
     private fun initialize() {
         initializeNavBar()
+        initializeView()
         setListeners()
     }
 
@@ -48,13 +53,22 @@ class ProfileFragment : BaseFragment() {
         binding.fragmentToolbar.toolbar.navigationIcon = null
     }
 
+    private fun initializeView() {
+        viewModel.setUser(SecurePreferences(requireContext()).get(AUTH_USER_ID, ""))
+    }
+
     private fun setListeners() {
         binding.exitButton.setOnClickListener { viewModel.onExitButtonClick() }
-        binding.loginButton.setOnClickListener { navigateTo(R.id.action_to_loginFragment) }
     }
 
     private fun setObservers() {
+        viewModel.state.onEach(::handleState).collectOnStart(viewLifecycleOwner)
         viewModel.action.onEach(::handleActions).collectOnStart(viewLifecycleOwner)
+    }
+
+    private fun handleState(state: ProfileViewModel.State) {
+        binding.nameTextView.text = state.name
+        binding.roleTextView.text = state.role
     }
 
     private fun handleActions(action: ProfileViewModel.Actions) {
@@ -65,7 +79,10 @@ class ProfileFragment : BaseFragment() {
                     message = R.string.alert_profile_exit_message,
                     positiveButton = R.string.alert_profile_exit,
                     isNegativeButtonNeeded = true,
-                    navigate = { viewModel.onConfirmExitClick() }
+                    navigate = {
+                        SecurePreferences(requireContext()).remove(AUTH_USER_ID)
+                        navigateTo(R.id.action_to_loginFragment)
+                    }
                 )
             )
         }

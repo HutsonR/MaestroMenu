@@ -19,6 +19,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = usersUseCase.checkUser(getState().username, getState().password)) {
                 is Resource.Success<*> -> {
+                    Log.d("LoginViewModel", "onLoginButtonClick: ${result.data}")
                     onAction(Actions.LoginSuccess(result.data.toString()))
                 }
                 is Resource.Failed -> {

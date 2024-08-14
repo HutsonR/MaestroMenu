@@ -17,6 +17,15 @@ class UserTypesUseCaseImpl @Inject constructor (
         }
     }
 
+    override suspend fun getTypeById(itemId: String): Resource {
+        val type = userTypesRepository.getTypeById(itemId)
+        return if (type != null) {
+            Resource.Success(type)
+        } else {
+            Resource.Failed(Exception("User not found"))
+        }
+    }
+
     override suspend fun getAll(): List<UserType> {
         return userTypesRepository.getAll()
     }

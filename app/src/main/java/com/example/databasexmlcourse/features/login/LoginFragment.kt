@@ -104,7 +104,7 @@ class LoginFragment : BaseFragment() {
     }
 
     companion object {
-        private const val AUTH_USER_ID = "auth_user_id"
+        const val AUTH_USER_ID = "auth_user_id"
     }
 
 }

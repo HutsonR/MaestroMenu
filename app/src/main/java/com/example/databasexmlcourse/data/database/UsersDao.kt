@@ -17,6 +17,9 @@ interface UsersDao {
     @Query("SELECT COUNT(*) > 0 FROM users WHERE id = :userId")
     suspend fun checkUserById(userId: String): Boolean
 
+    @Query("SELECT * FROM users WHERE id = :userId")
+    suspend fun getUserById(userId: String): UsersEntity?
+
     @Query("SELECT * FROM users ORDER BY id DESC")
     suspend fun getAll(): List<UsersEntity>
 
