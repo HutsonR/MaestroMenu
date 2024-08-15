@@ -6,6 +6,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PersonalItem(
     val id: String,
-    val name: String,
+    val fio: String,
+    val login: String,
+    val password: String,
     val type: String
 ): Parcelable

@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonalViewModel @Inject constructor(
-    // useCase
+    private val usersUseCase: UsersUseCase
 ) : BaseViewModel<PersonalViewModel.State, PersonalViewModel.Actions>(State()) {
 
     private var jobChangeQuerySearch: Job? = null
@@ -22,11 +22,6 @@ class PersonalViewModel @Inject constructor(
         viewModelScope.launch {
             modifyState { copy(isLoading = true) }
 
-            list = listOf(
-                PersonalItem(id = "1", name = "Роман Тузов", type = "Администратор"),
-                PersonalItem(id = "2", name = "Иван Иванов", type = "Менеджер"),
-                PersonalItem(id = "3", name = "Петя Петрович", type = "Официант")
-            )
             modifyState {
                 copy(
                     dataList = list,
@@ -65,7 +60,7 @@ class PersonalViewModel @Inject constructor(
             list
         } else {
             list.filter {
-                it.name.contains(querySearch, ignoreCase = true)
+                it.fio.contains(querySearch, ignoreCase = true)
             }
         }
     }

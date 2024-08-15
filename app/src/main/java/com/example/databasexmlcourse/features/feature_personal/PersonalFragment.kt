@@ -17,9 +17,11 @@ import com.example.databasexmlcourse.features.feature_personal.adapter.PersonalD
 import com.example.databasexmlcourse.features.feature_personal.adapter.PersonalLoadingDelegate
 import com.example.databasexmlcourse.features.feature_personal.adapter.models.PersonalListUiConverter
 import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlin.properties.Delegates
 
+@AndroidEntryPoint
 class PersonalFragment : BaseFragment() {
     private var _binding: FragmentPersonalBinding? = null
     private val binding get() = _binding!!

@@ -1,0 +1,114 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bottom_sheet_background"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent"
+        android:gravity="end">
+
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:src="@drawable/ic_close" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/personal_fio">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fioET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/loginET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:hint="@string/personal_login" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:hint="@string/personal_password" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/categoryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:text="@string/personal_type"
+                android:paddingVertical="16dp"
+                app:backgroundTint="@color/bottom_sheet_background"
+                app:strokeColor="@color/border_outlined_button"
+                android:textColor="@color/text_outlined_button"
+                android:textSize="14sp"
+                android:textAlignment="textStart"
+                android:layout_marginTop="8dp"/>
+
+            <Button
+                android:id="@+id/addCategoryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:text="@string/personal_add_type"
+                app:backgroundTint="@color/bottom_sheet_background"
+                android:textColor="@color/text_outlined_button"
+                android:textSize="14sp"
+                android:textAlignment="textStart" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/addError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_error"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:layout_marginVertical="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/personal_add_button"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/bottom_sheet_button_background" />
+    </LinearLayout>
+</FrameLayout>

@@ -25,7 +25,7 @@ class DialogSearcherDelegate(
 
     override fun DialogFragmentCategoryItemBinding.bind(item: DialogSearcherListItem) {
         contentLayout.setOnClickListener {
-            onItemClick(item.text)
+            onItemClick(item.id)
         }
         title.text = item.text
     }

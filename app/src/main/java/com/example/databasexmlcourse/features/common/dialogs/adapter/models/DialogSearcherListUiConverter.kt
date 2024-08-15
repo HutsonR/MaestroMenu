@@ -10,6 +10,12 @@ internal class DialogSearcherListUiConverter {
         }
     }
 
+    fun convertToModelItem(item: DialogSearcherListItem) =
+        DialogSearcherModel(
+            id = item.id,
+            text = item.text
+        )
+
     private fun DialogSearcherModel.convertToListItem() =
         DialogSearcherListItem(
             id = this.id,

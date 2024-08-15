@@ -1,6 +1,7 @@
 package com.example.databasexmlcourse
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -37,5 +38,29 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         bottomNavigationView.itemActiveIndicatorColor = getColorStateList(R.color.bgNavActiveItem)
+        checkActiveNavigation()
     }
+
+    private fun checkActiveNavigation() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val shouldShowNavigation = when (destination.id) {
+                R.id.homeFragment,
+                R.id.personalFragment,
+                R.id.menuFragment,
+                R.id.ordersFragment,
+                R.id.profileFragment -> true
+                else -> false
+            }
+
+            if (shouldShowNavigation) {
+                binding.bottomNavigationDivider.visibility = View.VISIBLE
+                binding.bottomNavigation.visibility = View.VISIBLE
+            } else {
+                binding.bottomNavigationDivider.visibility = View.GONE
+                binding.bottomNavigation.visibility = View.GONE
+            }
+        }
+    }
+
+
 }
