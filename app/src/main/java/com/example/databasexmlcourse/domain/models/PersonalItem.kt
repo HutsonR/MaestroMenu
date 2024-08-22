@@ -9,5 +9,5 @@ data class PersonalItem(
     val fio: String,
     val login: String,
     val password: String,
-    val type: String
+    val type: UserType
 ): Parcelable

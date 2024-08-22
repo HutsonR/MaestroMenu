@@ -103,12 +103,28 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/deleteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.FloatingActionButton.Primary"
+            android:text="@string/alert_order_cancel_confirm"
+            app:backgroundTint="@color/lightRed"
+            app:rippleColor="@color/onRedRipple"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingVertical="12dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="@string/personal_add_button"
             android:textColor="@color/black"
-            android:backgroundTint="@color/bottom_sheet_button_background" />
+            android:backgroundTint="@color/bottom_sheet_button_background"
+            style="@style/Widget.Material3.FloatingActionButton.Primary" />
     </LinearLayout>
 </FrameLayout>

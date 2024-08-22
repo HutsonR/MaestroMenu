@@ -11,7 +11,9 @@ import com.example.databasexmlcourse.domain.util.Resource
 import com.example.databasexmlcourse.features.common.dialogs.adapter.models.DialogSearcherModel
 import com.example.databasexmlcourse.features.util.DialogPurposes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -23,6 +25,20 @@ class PersonalDialogViewModel @Inject constructor(
     private val userTypesUseCase: UserTypesUseCase
 ) : BaseViewModel<PersonalDialogViewModel.State, PersonalDialogViewModel.Actions>(State()) {
 
+    init {
+        modifyState {
+            copy(
+                currentUser = PersonalItem(
+                    id = "",
+                    fio = "",
+                    login = "",
+                    password = "",
+                    type = UserType("", "")
+                )
+            )
+        }
+    }
+
     fun openCategoryDialog() {
         onAction(Actions.OpenCategoryDialog)
     }
@@ -31,42 +47,73 @@ class PersonalDialogViewModel @Inject constructor(
         onAction(Actions.OpenAddCategoryDialog)
     }
 
+    fun deleteUser() {
+        viewModelScope.launch {
+            usersUseCase.deleteById(getState().currentUser?.id ?: "")
+            onAction(Actions.GoBackWithUpdate)
+        }
+    }
+
     fun getCategories(): List<DialogSearcherModel> = runBlocking {
         withContext(Dispatchers.IO) {
             val categories = userTypesUseCase.getAll()
-            modifyState {
-                copy(userTypes = categories)
-            }
+            modifyState { copy(userTypes = categories) }
             categories.map { DialogSearcherModel(it.id, it.name) }
         }
     }
 
+    private fun updateCategories(): Deferred<List<UserType>> = viewModelScope.async {
+        val categories = userTypesUseCase.getAll()
+        modifyState {
+            copy(userTypes = categories)
+        }
+        return@async categories
+    }
+
     fun onActionButtonClick() {
         viewModelScope.launch {
-            when(getState().purpose) {
-                DialogPurposes.ADD -> {
-                    val result = usersUseCase.insert(
-                        User(
-                            fio = getState().fio,
-                            username = getState().login,
-                            password = getState().password,
-                            userType = getState().category?.id ?: ""
-                        )
-                    )
-
-                    when (result) {
-                        is Resource.Success<*> -> {
-                            onAction(Actions.GoBack)
-                        }
-                        is Resource.Failed -> {
-                            onAction(Actions.ShowFailedText)
-                        }
-                    }
-                }
-                DialogPurposes.EDIT -> {
-                    // TODO Изменить пользователя
-                }
+            val currentUser = getState().currentUser
+            val result = when (getState().purpose) {
+                DialogPurposes.ADD -> handleAddAction(currentUser)
+                DialogPurposes.EDIT -> handleEditAction(currentUser)
+                else -> Resource.Failed(Exception("Invalid purpose"))
             }
+
+            when (result) {
+                is Resource.Success<*> -> onAction(Actions.GoBackWithUpdate)
+                is Resource.Failed -> onAction(Actions.ShowFailedText)
+            }
+        }
+    }
+
+    private suspend fun handleAddAction(currentUser: PersonalItem?): Resource {
+        return currentUser?.let {
+            usersUseCase.insert(it.toUser())
+        } ?: Resource.Failed(Exception("User not found"))
+    }
+
+    private suspend fun handleEditAction(currentUser: PersonalItem?): Resource {
+        return currentUser?.let {
+            usersUseCase.update(it.toUser(withId = true))
+        } ?: Resource.Failed(Exception("User not found"))
+    }
+
+    private fun PersonalItem.toUser(withId: Boolean = false): User {
+        return if (withId) {
+            User(
+                id = this.id,
+                fio = this.fio,
+                username = this.login,
+                password = this.password,
+                userType = this.type.id
+            )
+        } else {
+            User(
+                fio = this.fio,
+                username = this.login,
+                password = this.password,
+                userType = this.type.id
+            )
         }
     }
 
@@ -76,47 +123,80 @@ class PersonalDialogViewModel @Inject constructor(
 
     fun parcelInitialize(item: PersonalItem) {
         modifyState { copy(purpose = DialogPurposes.EDIT) }
-        updateFio(item.fio)
-        updateCategory(item.type)
+        updateCurrentUser(item)
+        updateCategory(item.type.id)
+    }
+
+    private fun updateCurrentUser(item: PersonalItem) {
+        modifyState { copy(currentUser = item) }
+        updateSaveButtonState()
     }
 
     fun updateFio(text: String) {
-        modifyState { copy(fio = text) }
-        updateSaveButtonState()
-    }
-
-    fun updateLogin(text: String) {
-        modifyState { copy(login = text) }
-        updateSaveButtonState()
-    }
-
-    fun updatePassword(text: String) {
-        modifyState { copy(password = text) }
-        updateSaveButtonState()
-    }
-
-    fun updateCategory(text: String) {
-        val category = getState().userTypes.find { it.id == text }
-        category?.let {
-            modifyState { copy(category = it) }
+        modifyState {
+            copy(
+                currentUser = currentUser?.copy(fio = text),
+            )
         }
         updateSaveButtonState()
     }
 
+    fun updateLogin(text: String) {
+        modifyState {
+            copy(
+                currentUser = currentUser?.copy(login = text),
+            )
+        }
+        updateSaveButtonState()
+    }
+
+    fun updatePassword(text: String) {
+        modifyState {
+            copy(
+                currentUser = currentUser?.copy(password = text),
+            )
+        }
+        updateSaveButtonState()
+    }
+
+    fun updateCategory(id: String) {
+        viewModelScope.launch {
+            if (getState().purpose == DialogPurposes.EDIT) {
+                updateCategories().await()
+            }
+            val category = getState().userTypes.find { it.id == id }
+            category?.let {
+                modifyState {
+                    copy(currentUser = currentUser?.copy(type = it))
+                }
+            }
+            updateSaveButtonState()
+        }
+    }
+
     private fun updateSaveButtonState() {
-        val isEnable = getState().fio.isNotBlank()
-                && getState().category?.name?.isNotBlank() ?: false
-                && getState().login.isNotBlank()
-                && getState().password.isNotBlank()
+        val currentUser = getState().currentUser
+        val isEnable = when(getState().purpose) {
+            DialogPurposes.ADD -> {
+                currentUser != null
+                    && currentUser.fio.isNotBlank()
+                    && currentUser.login.isNotBlank()
+                    && currentUser.password.isNotBlank()
+                    && currentUser.type.name.isNotBlank()
+            }
+            DialogPurposes.EDIT -> {
+                currentUser != null
+                    && currentUser.fio.isNotBlank()
+                    && currentUser.login.isNotBlank()
+                    && currentUser.type.name.isNotBlank()
+            }
+        }
 
         modifyState { copy(isSaveButtonEnable = isEnable) }
     }
 
     data class State(
-        val fio: String = "",
-        val login: String = "",
-        val password: String = "",
-        val category: UserType? = null,
+        val currentUser: PersonalItem? = null,
         val userTypes: List<UserType> = emptyList(),
         val isSaveButtonEnable: Boolean = false,
         val purpose: DialogPurposes = DialogPurposes.ADD
@@ -126,6 +206,7 @@ class PersonalDialogViewModel @Inject constructor(
         data object OpenCategoryDialog : Actions
         data object OpenAddCategoryDialog : Actions
         data object ShowFailedText : Actions
+        data object GoBackWithUpdate : Actions
         data object GoBack : Actions
     }
 

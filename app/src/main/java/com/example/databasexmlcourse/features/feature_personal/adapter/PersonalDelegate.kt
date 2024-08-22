@@ -25,7 +25,7 @@ class PersonalDelegate(
             onEditClick(item.id)
         }
         title.text = item.name
-        type.text = item.type
+        type.text = item.type.name
     }
 
 }

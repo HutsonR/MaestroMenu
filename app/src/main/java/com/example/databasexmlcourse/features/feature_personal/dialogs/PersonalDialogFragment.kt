@@ -60,8 +60,9 @@ class PersonalDialogFragment : DialogFragment() {
             with(binding) {
                 fioET.setText(it.fio)
                 loginET.setText(it.login)
-                passwordET.setText(it.password)
-                categoryButton.text = it.type
+                passwordET.visibility = View.GONE
+                categoryButton.text = it.type.name
+                deleteButton.visibility = View.VISIBLE
                 saveButton.text = getString(R.string.save)
             }
             viewModel.parcelInitialize(it)
@@ -74,7 +75,7 @@ class PersonalDialogFragment : DialogFragment() {
     }
 
     private fun handleState(state: PersonalDialogViewModel.State) {
-        updateCategoryTextButton(state.category?.name ?: "")
+        updateCategoryTextButton(state.currentUser?.type?.name ?: "")
         updateSaveButtonState(state.isSaveButtonEnable)
     }
 
@@ -85,6 +86,13 @@ class PersonalDialogFragment : DialogFragment() {
             }.show(childFragmentManager, "personal category view fragment")
             is PersonalDialogViewModel.Actions.OpenAddCategoryDialog -> PersonalDialogAddCategoryFragment().show(childFragmentManager, "personal add category view fragment")
             is PersonalDialogViewModel.Actions.GoBack -> dismiss()
+            is PersonalDialogViewModel.Actions.GoBackWithUpdate -> {
+                val bundle = Bundle().apply {
+                    putBoolean(PERSONAL_DIALOG_FRAGMENT_RESULT, true)
+                }
+                activity?.supportFragmentManager?.setFragmentResult(KEY_PERSONAL_DIALOG_FRAGMENT_RESULT, bundle)
+                dismiss()
+            }
             is PersonalDialogViewModel.Actions.ShowFailedText -> binding.addError.visibility = View.VISIBLE
         }
     }
@@ -95,6 +103,7 @@ class PersonalDialogFragment : DialogFragment() {
         passwordListener()
         categoryButtonListener()
         addCategoryButtonListener()
+        deleteButtonListener()
     }
 
     private fun updateCategoryTextButton(text: String) {
@@ -147,7 +156,14 @@ class PersonalDialogFragment : DialogFragment() {
         binding.addCategoryButton.setOnClickListener { viewModel.openAddCategoryDialog() }
     }
 
+    private fun deleteButtonListener() {
+        binding.deleteButton.setOnClickListener { viewModel.deleteUser() }
+    }
+
     companion object {
         const val PARCEL_ITEM = "PersonalDialogItem"
+
+        const val KEY_PERSONAL_DIALOG_FRAGMENT_RESULT = "KEYPersonalFragmentResultDelete"
+        const val PERSONAL_DIALOG_FRAGMENT_RESULT = "PersonalFragmentResultDelete"
     }
 }

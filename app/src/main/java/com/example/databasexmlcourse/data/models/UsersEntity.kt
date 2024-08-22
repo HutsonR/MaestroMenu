@@ -34,6 +34,7 @@ fun UsersEntity.asExternalModel() = User(
     userType = userTypeId
 )
 fun User.asEntity() = UsersEntity(
+    id = id.ifBlank { UUID.randomUUID().toString() },
     fio = fio,
     username = username,
     password = password,

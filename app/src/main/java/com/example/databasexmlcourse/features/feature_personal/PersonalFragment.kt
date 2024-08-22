@@ -17,6 +17,8 @@ import com.example.databasexmlcourse.features.feature_personal.adapter.PersonalD
 import com.example.databasexmlcourse.features.feature_personal.adapter.PersonalLoadingDelegate
 import com.example.databasexmlcourse.features.feature_personal.adapter.models.PersonalListUiConverter
 import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment
+import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment.Companion.KEY_PERSONAL_DIALOG_FRAGMENT_RESULT
+import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment.Companion.PERSONAL_DIALOG_FRAGMENT_RESULT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlin.properties.Delegates
@@ -68,6 +70,7 @@ class PersonalFragment : BaseFragment() {
 
     private fun setListeners() {
         binding.addButton.setOnClickListener { viewModel.openAddDialog() }
+        setFragmentListener()
         searchListener()
     }
 
@@ -94,6 +97,18 @@ class PersonalFragment : BaseFragment() {
                     childFragmentManager,
                     menuDialogFragment.tag
                 )
+            }
+        }
+    }
+
+    private fun setFragmentListener() {
+        // Из PersonalDialogFragment
+        activity?.supportFragmentManager?.setFragmentResultListener(
+            KEY_PERSONAL_DIALOG_FRAGMENT_RESULT,
+            this
+        ) { _, bundle ->
+            if (bundle.getBoolean(PERSONAL_DIALOG_FRAGMENT_RESULT)) {
+                viewModel.updateList()
             }
         }
     }

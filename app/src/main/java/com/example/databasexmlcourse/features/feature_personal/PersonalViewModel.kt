@@ -2,8 +2,11 @@ package com.example.databasexmlcourse.features.feature_personal
 
 import androidx.lifecycle.viewModelScope
 import com.example.databasexmlcourse.core.BaseViewModel
+import com.example.databasexmlcourse.domain.domain_api.UserTypesUseCase
 import com.example.databasexmlcourse.domain.domain_api.UsersUseCase
 import com.example.databasexmlcourse.domain.models.PersonalItem
+import com.example.databasexmlcourse.domain.models.UserType
+import com.example.databasexmlcourse.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,23 +15,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonalViewModel @Inject constructor(
-    private val usersUseCase: UsersUseCase
+    private val usersUseCase: UsersUseCase,
+    private val userTypesUseCase: UserTypesUseCase
 ) : BaseViewModel<PersonalViewModel.State, PersonalViewModel.Actions>(State()) {
 
     private var jobChangeQuerySearch: Job? = null
-    private var list: List<PersonalItem> = emptyList()
+    private var list: MutableList<PersonalItem> = mutableListOf()
 
     init {
-        viewModelScope.launch {
-            modifyState { copy(isLoading = true) }
-
-            modifyState {
-                copy(
-                    dataList = list,
-                    isLoading = false
-                )
-            }
-        }
+        updateList()
     }
 
     fun onEditClick(id: String) {
@@ -47,6 +42,42 @@ class PersonalViewModel @Inject constructor(
                 copy(
                     dataList = filteredList,
                     query = querySearch
+                )
+            }
+        }
+    }
+
+    fun updateList() {
+        viewModelScope.launch {
+            modifyState {
+                copy(
+                    dataList = emptyList(),
+                    isLoading = true
+                )
+            }
+            list.clear()
+            val users = usersUseCase.getAll()
+            users.forEach { user ->
+                when (val roleResponse = userTypesUseCase.getTypeById(user.userType)) {
+                    is Resource.Success<*> -> {
+                        val role = (roleResponse.data as UserType)
+                        list.add(
+                            PersonalItem(
+                                id = user.id,
+                                fio = user.fio,
+                                login = user.username,
+                                password = user.password,
+                                type = role
+                            )
+                        )
+                    }
+                    is Resource.Failed -> Unit
+                }
+            }
+            modifyState {
+                copy(
+                    dataList = list,
+                    isLoading = false
                 )
             }
         }
