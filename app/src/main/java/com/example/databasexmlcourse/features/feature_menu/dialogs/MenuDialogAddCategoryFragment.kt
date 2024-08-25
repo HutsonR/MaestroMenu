@@ -10,9 +10,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.databasexmlcourse.core.utils.collectOnStart
 import com.example.databasexmlcourse.databinding.DialogFragmentAddCategoryMenuBinding
+import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogAddCategoryViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
-
+@AndroidEntryPoint
 class MenuDialogAddCategoryFragment : DialogFragment() {
     private var _binding: DialogFragmentAddCategoryMenuBinding? = null
     private val binding get() = _binding!!
@@ -58,7 +60,8 @@ class MenuDialogAddCategoryFragment : DialogFragment() {
 
     private fun handleActions(action: MenuDialogAddCategoryViewModel.Actions) {
         when (action) {
-           is MenuDialogAddCategoryViewModel.Actions.GoBack -> dismiss()
+            is MenuDialogAddCategoryViewModel.Actions.GoBack -> dismiss()
+            is MenuDialogAddCategoryViewModel.Actions.ShowFailedText -> binding.addCategoryError.visibility = View.VISIBLE
         }
     }
 

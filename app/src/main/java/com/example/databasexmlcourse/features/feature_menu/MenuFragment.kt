@@ -17,9 +17,15 @@ import com.example.databasexmlcourse.features.feature_menu.adapter.LoadingDelega
 import com.example.databasexmlcourse.features.feature_menu.adapter.MenuDelegate
 import com.example.databasexmlcourse.features.feature_menu.adapter.models.MenuListUiConverter
 import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogFragment
+import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogFragment.Companion.KEY_MENU_DIALOG_FRAGMENT_RESULT
+import com.example.databasexmlcourse.features.feature_menu.dialogs.MenuDialogFragment.Companion.MENU_DIALOG_FRAGMENT_RESULT
+import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment.Companion.KEY_PERSONAL_DIALOG_FRAGMENT_RESULT
+import com.example.databasexmlcourse.features.feature_personal.dialogs.PersonalDialogFragment.Companion.PERSONAL_DIALOG_FRAGMENT_RESULT
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlin.properties.Delegates
 
+@AndroidEntryPoint
 class MenuFragment : BaseFragment() {
     private var _binding: FragmentMenuBinding? = null
     private val binding get() = _binding!!
@@ -67,6 +73,7 @@ class MenuFragment : BaseFragment() {
     private fun setListeners() {
         binding.addButton.setOnClickListener { viewModel.openDialog() }
         searchListener()
+        setFragmentListener()
     }
 
     private fun setObservers() {
@@ -92,6 +99,18 @@ class MenuFragment : BaseFragment() {
                     childFragmentManager,
                     menuDialogFragment.tag
                 )
+            }
+        }
+    }
+
+    private fun setFragmentListener() {
+        // Из MenuDialogFragment
+        activity?.supportFragmentManager?.setFragmentResultListener(
+            KEY_MENU_DIALOG_FRAGMENT_RESULT,
+            this
+        ) { _, bundle ->
+            if (bundle.getBoolean(MENU_DIALOG_FRAGMENT_RESULT)) {
+                viewModel.updateList()
             }
         }
     }
