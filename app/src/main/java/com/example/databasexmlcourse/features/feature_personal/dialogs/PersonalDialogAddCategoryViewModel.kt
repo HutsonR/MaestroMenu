@@ -16,19 +16,17 @@ class PersonalDialogAddCategoryViewModel @Inject constructor(
     private val userTypesUseCase: UserTypesUseCase
 ) : BaseViewModel<PersonalDialogAddCategoryViewModel.State, PersonalDialogAddCategoryViewModel.Actions>(State()) {
 
-    fun onActionButtonClick() {
-        viewModelScope.launch {
-            val result = userTypesUseCase.insert(
-                UserType(name = getState().name)
-            )
+    fun onActionButtonClick() = viewModelScope.launch {
+        val result = userTypesUseCase.insert(
+            UserType(name = getState().name)
+        )
 
-            when (result) {
-                is Resource.Success<*> -> {
-                    onAction(Actions.GoBack)
-                }
-                is Resource.Failed -> {
-                    onAction(Actions.ShowFailedText)
-                }
+        when (result) {
+            is Resource.Success<*> -> {
+                onAction(Actions.GoBack)
+            }
+            is Resource.Failed -> {
+                onAction(Actions.ShowFailedText)
             }
         }
     }

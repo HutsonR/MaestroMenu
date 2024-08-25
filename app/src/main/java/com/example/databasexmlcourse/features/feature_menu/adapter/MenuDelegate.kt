@@ -24,6 +24,7 @@ class MenuDelegate(
             onEditClick(item.id)
         }
         title.text = item.name
+        categoryName.text = item.category.name
         price.text = String.format(
             "%s %s",
             item.price,

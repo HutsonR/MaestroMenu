@@ -1,6 +1,7 @@
 package com.example.databasexmlcourse.features.feature_menu.adapter.models
 
 import com.example.databasexmlcourse.core.composite.CompositeItem
+import com.example.databasexmlcourse.domain.models.DishCategory
 
 sealed class MenuListItem(override val id: String): CompositeItem {
 
@@ -8,7 +9,7 @@ sealed class MenuListItem(override val id: String): CompositeItem {
         override val id: String,
         val name: String,
         val price: Int,
-        val category: String
+        val category: DishCategory
     ): MenuListItem(id)
 
     data object Loading: MenuListItem("Loading")
