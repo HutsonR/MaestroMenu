@@ -1,45 +1,41 @@
 package com.example.databasexmlcourse.features.feature_orders.add
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.example.databasexmlcourse.core.BaseViewModel
+import com.example.databasexmlcourse.domain.domain_api.DishCategoriesUseCase
+import com.example.databasexmlcourse.domain.domain_api.DishesUseCase
+import com.example.databasexmlcourse.domain.domain_api.TableStatusesUseCase
+import com.example.databasexmlcourse.domain.domain_api.TablesUseCase
+import com.example.databasexmlcourse.domain.models.DishCategory
 import com.example.databasexmlcourse.domain.models.DishItem
 import com.example.databasexmlcourse.domain.models.OrdersItem
+import com.example.databasexmlcourse.domain.models.TableItem
+import com.example.databasexmlcourse.domain.models.TableStatus
 import com.example.databasexmlcourse.features.common.dialogs.adapter.models.DialogSearcherModel
+import com.example.databasexmlcourse.features.feature_orders.OrdersViewModel.Companion.TABLE_FREE
 import com.example.databasexmlcourse.features.feature_orders.util.OrderStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class OrderAddViewModel @Inject constructor(
-    // UseCase
+    private val tablesUseCase: TablesUseCase,
+    private val tableStatusesUseCase: TableStatusesUseCase,
+    private val dishesUseCase: DishesUseCase,
+    private val dishCategoriesUseCase: DishCategoriesUseCase
 ) : BaseViewModel<OrderAddViewModel.State, OrderAddViewModel.Actions>(State()) {
 
-    var categoryList = listOf(
-        DialogSearcherModel("1", "Все"),
-        DialogSearcherModel("2", "Завтрак"),
-        DialogSearcherModel("3", "Обед"),
-        DialogSearcherModel("4", "Ужин")
-    )
-
-    var tableList = listOf(
-        DialogSearcherModel("1", "1 столик"),
-        DialogSearcherModel("2", "2 столик"),
-        DialogSearcherModel("3", "3 столик"),
-        DialogSearcherModel("4", "4 столик"),
-        DialogSearcherModel("5", "5 столик"),
-        DialogSearcherModel("6", "6 столик"),
-        DialogSearcherModel("7", "7 столик"),
-        DialogSearcherModel("8", "8 столик"),
-        DialogSearcherModel("9", "9 столик"),
-        DialogSearcherModel("10", "10 столик")
-    )
+    private var allDishes: List<DishItem> = emptyList()
 
     init {
-        val dishes = listOf(
-            DishItem("1", "Борщ", 100, "25", 0),
-            DishItem("2", "Суп", 120, "25", 0),
-        )
-        modifyState { copy(dishList = dishes) }
+        updateDishList()
     }
 
     fun onTableButtonClick() {
@@ -54,72 +50,145 @@ class OrderAddViewModel @Inject constructor(
         onAction(Actions.GoBack)
     }
 
-    fun updateCategory(text: String) {
-        modifyState { copy(category = text) }
-        if (getState().table.isNotBlank() && getState().category.isNotBlank()) {
+    fun getCategories(): List<DialogSearcherModel> = runBlocking {
+        withContext(Dispatchers.IO) {
+            val categories = dishCategoriesUseCase.getAll()
+            modifyState { copy(dishCategories = categories) }
+            categories.map { DialogSearcherModel(it.id, it.name) }
+        }
+    }
+
+    fun getTables(): List<DialogSearcherModel> = runBlocking {
+        withContext(Dispatchers.IO) {
+            val table = tablesUseCase.getAll()
+            val tableStatuses = tableStatusesUseCase.getAll().filter { it.name == TABLE_FREE }
+            val filteredTable = table.filter { it.tableStatusId == tableStatuses.first().id }.sortedBy { it.number }
+
+            modifyState { copy(tables = filteredTable) }
+            filteredTable.map { DialogSearcherModel(it.id, it.number.toString()) }
+        }
+    }
+
+    fun updateCategory(id: String) = viewModelScope.launch {
+        val category = getState().dishCategories.find { it.id == id }
+        category?.let {
+            modifyState {
+                copy(currentDishCategory = it)
+            }
             updateDishList()
         }
         updateSaveButtonState()
     }
 
-    private fun updateDishList() {
-        // TODO - update dish list
-        val list: List<DishItem> = listOf()
-        modifyState { copy(dishList = list) }
+    fun updateTable(id: String) = viewModelScope.launch {
+        val table = getState().tables.find { it.id == id }
+        table?.let {
+            modifyState {
+                copy(currentTable = it)
+            }
+        }
+        updateSaveButtonState()
+    }
+
+    private fun updateDishList() = viewModelScope.launch {
+        modifyState { copy(isLoading = true) }
+
+        if (allDishes.isEmpty()) {
+            val fetchedDishes = async { dishesUseCase.getAll() }
+            allDishes = fetchedDishes.await()
+        }
+
+        val currentCategoryId = getState().currentDishCategory?.id
+        val list: List<DishItem> = allDishes.filter { it.dishCategoryId == currentCategoryId }
+        modifyState {
+            copy(
+                isLoading = false,
+                dishes = list
+            )
+        }
+    }
+
+    private fun modifyList(itemId: String, isAdd: Boolean) = viewModelScope.launch {
+        modifyState { copy(isLoading = true) }
+
+        allDishes = allDishes.map { if (it.id == itemId) it.copy(count = if (isAdd) it.count + 1 else it.count - 1) else it }
+        val filteredList: List<DishItem> = allDishes.filter { it.dishCategoryId == getState().currentDishCategory?.id }
+
+        modifyState {
+            copy(
+                isLoading = false,
+                dishes = filteredList
+            )
+        }
     }
 
     fun onAddDishClick(id: String) {
-        val modifiedList = getState().dishList.map { if (it.id == id) it.copy(count = it.count + 1) else it }
-        modifyState {
-            copy(dishList = modifiedList)
+        modifyList(id, true)
+        val list = getState().dishes
+
+        val currentOrder = getState().currentOrder ?: initOrderItem()
+        val existingDish = currentOrder.dishes.find { it.id == id }
+
+        val updatedDishes = if (existingDish != null) {
+            currentOrder.dishes.map {
+                if (it.id == id) it.copy(count = it.count + 1) else it
+            }
+        } else {
+            val newDish = list.find { it.id == id }?.copy(count = 1)
+            if (newDish != null) currentOrder.dishes.plus(newDish) else currentOrder.dishes
         }
 
-        val item = getState().dishList.find { it.id == id } ?: return
-        val currentOrder = getState().currentOrder ?: initOrderItem()
         modifyState {
             copy(
                 currentOrder = currentOrder.copy(
-                    dishes = currentOrder.dishes.plus(item),
+                    dishes = updatedDishes,
                     totalAmount = sumDishList()
                 )
             )
         }
-        Log.d("debugTag", "onAddDishClick: ${getState().currentOrder}")
     }
 
     fun onRemoveDishClick(id: String) {
-        val modifiedList = getState().dishList.map { if (it.id == id && it.count > 0) it.copy(count = it.count - 1) else it }
-        modifyState {
-            copy(dishList = modifiedList)
-        }
+        modifyList(id, false)
 
-        val item = getState().dishList.find { it.id == id } ?: return
         val currentOrder = getState().currentOrder
+        val existingDish = currentOrder?.dishes?.find { it.id == id }
+
+        val updatedDishes = (if (existingDish != null) {
+            currentOrder.dishes.map {
+                if (it.id == id) it.copy(count = it.count - 1) else it
+            }
+        } else {
+            currentOrder?.dishes
+        })?.filter { it.count > 0 }
+
         modifyState {
             copy(
                 currentOrder = currentOrder?.copy(
-                    dishes = currentOrder.dishes.minus(item),
+                    dishes = updatedDishes ?: emptyList(),
                     totalAmount = sumDishList()
                 )
             )
         }
-        Log.d("debugTag", "onRemoveDishClick: ${getState().currentOrder}")
     }
 
     private fun sumDishList(): Int {
         var sum = 0
-        getState().dishList.forEach {
+        getState().dishes.forEach {
             sum += it.price * it.count
         }
         return sum
     }
 
     private fun updateSaveButtonState() {
-        val isEnable = getState().table.isNotBlank() && getState().category.isNotBlank()
+        val isEnable = getState().currentTable != null
+                && getState().currentDishCategory != null
+                && getState().currentOrder?.dishes?.isNotEmpty() ?: false
         modifyState { copy(isSaveButtonEnable = isEnable) }
     }
 
-    fun onActionButtonClick() {
+    fun onActionButtonClick() = viewModelScope.launch {
+
         // TODO Добавить заказ в БД и закрыть окно
     }
 
@@ -127,7 +196,7 @@ class OrderAddViewModel @Inject constructor(
         id = "",
         userId = "",
         createdAt = "",
-        tableId = getState().table,
+        tableId = getState().currentTable?.id ?: "",
         dishes = emptyList(),
         totalAmount = 0,
         status = OrderStatus.AWAIT.status,
@@ -135,10 +204,12 @@ class OrderAddViewModel @Inject constructor(
     )
 
     data class State(
-        val table: String = "",
-        val category: String = "",
         val currentOrder: OrdersItem? = null,
-        val dishList: List<DishItem> = emptyList(),
+        val currentTable: TableItem? = null,
+        val currentDishCategory: DishCategory? = null,
+        val dishCategories: List<DishCategory> = emptyList(),
+        val tables: List<TableItem> = emptyList(),
+        val dishes: List<DishItem> = emptyList(),
         val isLoading: Boolean = false,
         val isSaveButtonEnable: Boolean = false
     )
@@ -148,5 +219,4 @@ class OrderAddViewModel @Inject constructor(
         data object OpenTableDialog : Actions
         data object OpenCategoryDialog : Actions
     }
-
 }

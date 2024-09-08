@@ -27,6 +27,9 @@ data class DishesEntity(
     val count: Int
 )
 
+
+
+
 fun DishesEntity.asExternalModel() = DishItem(
     id = id,
     name = name,

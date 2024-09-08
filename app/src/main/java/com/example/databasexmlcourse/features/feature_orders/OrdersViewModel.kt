@@ -2,6 +2,8 @@ package com.example.databasexmlcourse.features.feature_orders
 
 import androidx.lifecycle.viewModelScope
 import com.example.databasexmlcourse.core.BaseViewModel
+import com.example.databasexmlcourse.domain.domain_api.TableStatusesUseCase
+import com.example.databasexmlcourse.domain.domain_api.TablesUseCase
 import com.example.databasexmlcourse.domain.models.DishItem
 import com.example.databasexmlcourse.domain.models.OrdersItem
 import com.example.databasexmlcourse.features.feature_orders.util.OrderStatus
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrdersViewModel @Inject constructor(
-    // useCase
+    private val tablesUseCase: TablesUseCase,
+    private val tableStatusesUseCase: TableStatusesUseCase
 ) : BaseViewModel<OrdersViewModel.State, OrdersViewModel.Actions>(State()) {
 
     init {
@@ -138,5 +141,10 @@ class OrdersViewModel @Inject constructor(
     sealed interface Actions {
         data object OpenAddDialog : Actions
         data class ShowCancelAlert(val item: OrdersItem) : Actions
+    }
+
+    companion object {
+        const val TABLE_FREE = "Свободен"
+        const val TABLE_BUSY = "Занят"
     }
 }

@@ -16,9 +16,11 @@ import com.example.databasexmlcourse.features.feature_orders.add.adapter.OrderAd
 import com.example.databasexmlcourse.features.feature_orders.add.adapter.OrderAddLoadingDelegate
 import com.example.databasexmlcourse.features.feature_orders.add.adapter.models.OrderDishItemUiConverter
 import com.example.databasexmlcourse.features.common.dialogs.DialogSearcherFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlin.properties.Delegates
 
+@AndroidEntryPoint
 class OrderAddFragment: BaseFragment() {
     private var _binding: DialogFragmentOrdersBinding? = null
     private val binding get() = _binding!!
@@ -38,7 +40,7 @@ class OrderAddFragment: BaseFragment() {
     }
 
     private fun initializeNavBar() {
-        binding.fragmentToolbar.toolbar.title = getString(R.string.menu_menu)
+        binding.fragmentToolbar.toolbar.title = getString(R.string.orders_add_button)
         binding.fragmentToolbar.toolbar.setNavigationOnClickListener { viewModel.goBack() }
     }
 
@@ -60,7 +62,27 @@ class OrderAddFragment: BaseFragment() {
     }
 
     private fun handleState(state: OrderAddViewModel.State) {
-        val list = OrderDishItemUiConverter().convertToOrdersListItem(state.dishList, state.isLoading)
+        with(binding) {
+            tableButton.text = if (state.currentTable?.number == null) {
+                getString(R.string.order_add_choose_table)
+            } else {
+                String.format(
+                    "%s %s",
+                    getString(R.string.orders_table),
+                    state.currentTable.number.toString()
+                )
+            }
+            categoryButton.text = if (state.currentDishCategory?.name == null) {
+                getString(R.string.order_add_choose_category)
+            } else {
+                String.format(
+                    "%s %s",
+                    getString(R.string.order_add_category),
+                    state.currentDishCategory.name
+                )
+            }
+        }
+        val list = OrderDishItemUiConverter().convertToOrdersListItem(state.dishes, state.isLoading)
         adapter.submitList(list)
         updateSum(state.currentOrder?.totalAmount ?: 0)
         updateSaveButtonState(state.isSaveButtonEnable)
@@ -69,12 +91,13 @@ class OrderAddFragment: BaseFragment() {
     private fun handleActions(action: OrderAddViewModel.Actions) {
         when (action) {
             is OrderAddViewModel.Actions.OpenCategoryDialog -> {
-                DialogSearcherFragment(viewModel.categoryList) {
-                    Log.d("debugTag", "order add fragment: $it")
+                DialogSearcherFragment(viewModel.getCategories()) {
+                    viewModel.updateCategory(it)
                 }.show(childFragmentManager, "add order category view fragment")
             }
             is OrderAddViewModel.Actions.OpenTableDialog -> {
-                DialogSearcherFragment(viewModel.tableList) {
+                DialogSearcherFragment(viewModel.getTables()) {
+                    viewModel.updateTable(it)
                     Log.d("debugTag", "order add fragment: $it")
                 }.show(childFragmentManager, "add order table view fragment")
             }

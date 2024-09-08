@@ -1,13 +1,9 @@
 package com.example.databasexmlcourse.domain.domain_impl
 
 import com.example.databasexmlcourse.data.repository_api.DishesRepository
-import com.example.databasexmlcourse.data.repository_api.UsersRepository
 import com.example.databasexmlcourse.domain.domain_api.DishesUseCase
-import com.example.databasexmlcourse.domain.domain_api.UsersUseCase
 import com.example.databasexmlcourse.domain.models.DishItem
-import com.example.databasexmlcourse.domain.models.User
 import com.example.databasexmlcourse.domain.util.Resource
-import org.springframework.security.crypto.bcrypt.BCrypt
 import javax.inject.Inject
 
 class DishesUseCaseImpl @Inject constructor (
@@ -21,10 +17,10 @@ class DishesUseCaseImpl @Inject constructor (
         }
     }
 
-    override suspend fun getDishById(userId: String): Resource {
-        val user = dishesRepository.getDishById(userId)
-        return if (user != null) {
-            Resource.Success(user)
+    override suspend fun getDishById(id: String): Resource {
+        val item = dishesRepository.getDishById(id)
+        return if (item != null) {
+            Resource.Success(item)
         } else {
             Resource.Failed(Exception("Dish not found"))
         }

@@ -6,7 +6,7 @@ import com.example.databasexmlcourse.domain.util.Resource
 interface DishesUseCase {
     suspend fun insert(item: DishItem): Resource
 
-    suspend fun getDishById(userId: String): Resource
+    suspend fun getDishById(id: String): Resource
 
     suspend fun getAll(): List<DishItem>
 
